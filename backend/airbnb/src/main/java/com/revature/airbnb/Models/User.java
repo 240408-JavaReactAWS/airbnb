@@ -1,5 +1,9 @@
 package com.revature.airbnb.Models;
 
+import java.util.Random;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +21,10 @@ public class User {
     private String username;
     private String password;
     private String email;
+    @Column(unique = true)
+    private String token;
+    //Let's figure out how to hide this later
+    private final String tokenChars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public User() {}
 
@@ -50,4 +58,22 @@ public class User {
         this.email = email;
     }
 
+    public String getToken() {
+        return this.token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public void generateToken()
+    {
+        String toRet = "";
+        Random random = new Random();
+        for(int i = 0; i < 10; i++)
+        {
+            toRet += tokenChars.charAt(random.nextInt(tokenChars.length()));
+        }
+        this.token = toRet;
+    }
 }

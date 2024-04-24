@@ -3,6 +3,7 @@ package com.revature.airbnb.Services;
 import java.util.List;
 import java.util.Optional;
 
+import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 
@@ -39,5 +40,24 @@ public class RenterService {
 
     public List<Renter> getAllRenters() {
         return renterDAO.findAll();
+    }
+
+    public Renter login(String username, String password) throws InvalidAuthenticationException
+    {
+        Renter toRet = renterDAO.findByUsernameAndPassword(username, password).orElseThrow(() -> new InvalidAuthenticationException(
+            "That username/password combination is not present in the database."));
+
+        toRet.generateToken();
+        //toRet.setToken(username);
+        renterDAO.save(toRet);
+        return toRet;
+    }
+
+    public Renter logout(String token) throws InvalidAuthenticationException
+    {
+        Renter toRet = renterDAO.findByToken(token).orElseThrow(()-> new InvalidAuthenticationException("Could not find user for corresponding token."));
+        toRet.setToken(null);
+        renterDAO.save(toRet);
+        return toRet;
     }
 }

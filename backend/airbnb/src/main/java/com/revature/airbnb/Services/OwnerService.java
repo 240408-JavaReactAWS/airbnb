@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.revature.airbnb.DAOs.OwnerDAO;
+import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import com.revature.airbnb.Models.Owner;
@@ -27,7 +28,7 @@ public class OwnerService {
         // validate no owner exists by your username
         Optional<Owner> possibleOwner = ownerDAO.findOwnerByUsername(username);
         if (possibleOwner.isPresent()) {
-            throw new UserNotFoundException("Username: " + username + " was already taken");
+            throw new UsernameAlreadyTakenException("Username: " + username + " was already taken");
         }
         Owner newOwner = new Owner(username, password, email, null);
 
@@ -38,4 +39,22 @@ public class OwnerService {
         return ownerDAO.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
+    public Owner login(String username, String password) throws InvalidAuthenticationException
+    {
+        Owner toRet = ownerDAO.findByUsernameAndPassword(username, password).orElseThrow(() -> new InvalidAuthenticationException(
+            "That username/password combination is not present in the database."));
+
+        toRet.generateToken();
+        //toRet.setToken(username);
+        ownerDAO.save(toRet);
+        return toRet;
+    }
+
+    public Owner logout(String token) throws InvalidAuthenticationException
+    {
+        Owner toRet = ownerDAO.findByToken(token).orElseThrow(()-> new InvalidAuthenticationException("Could not find user for corresponding token."));
+        toRet.setToken(null);
+        ownerDAO.save(toRet);
+        return toRet;
+    }
 }
