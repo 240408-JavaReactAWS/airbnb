@@ -9,7 +9,6 @@ import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import org.springframework.stereotype.Service;
 
 import com.revature.airbnb.DAOs.RenterDAO;
-import com.revature.airbnb.Models.Booking;
 import com.revature.airbnb.Models.Renter;
 
 @Service
@@ -19,10 +18,6 @@ public class RenterService {
     public RenterService(RenterDAO renterDAO) {
         this.renterDAO = renterDAO;
     }
-
-    /*public Renter createRenter(Renter renter) {
-        return renterDAO.save(renter);
-    }*/
 
     // register a renter account
     public Renter registerRenter(String username, String password, String email) throws UsernameAlreadyTakenException {

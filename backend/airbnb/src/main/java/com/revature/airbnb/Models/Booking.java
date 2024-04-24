@@ -7,8 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table (name = "bookings")
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +19,7 @@ public class Booking {
 
     private Timestamp startDate;
     private Timestamp endDate;
-    private String status;
+    private String status; // possibly make enum
 
     public Booking(int bookingId, Timestamp startDate, Timestamp endDate, String status) {
         this.bookingId = bookingId;

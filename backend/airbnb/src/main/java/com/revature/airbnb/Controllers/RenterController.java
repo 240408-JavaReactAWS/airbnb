@@ -33,11 +33,6 @@ public class RenterController {
         this.renterService = renterService;
     }
 
-    /*@PostMapping
-    public Renter createRenter(@RequestBody Renter renter) {
-        return renterService.createRenter(renter);
-    }*/
-
     @PostMapping
     public ResponseEntity<Renter> registerRenter(@RequestBody Renter renter) {
         Renter savedRenter;

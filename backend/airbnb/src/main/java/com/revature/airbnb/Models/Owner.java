@@ -21,9 +21,8 @@ public class Owner extends User{
         super();
     }
 
-    public Owner(String username, String password, String email, List<Booking> bookingHistory,
-            List<Listing> listings) {
-        super(username, password, email, bookingHistory);
+    public Owner(String username, String password, String email, List<Listing> listings) {
+        super(username, password, email);
         this.listings = listings;
     }
 

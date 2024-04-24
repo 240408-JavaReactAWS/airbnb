@@ -12,16 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.revature.airbnb.Exceptions.UserNotFoundException;
+import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Services.OwnerService;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/owners")
 public class OwnerController {
-    
+
     private final OwnerService ownerService;
 
     @Autowired
@@ -30,8 +33,15 @@ public class OwnerController {
     }
 
     @PostMapping
-    public Owner createOwner(@RequestBody Owner owner) {
-        return ownerService.createOwner(owner);
+    public ResponseEntity<Owner> registerOwner(@RequestBody Owner owner) {
+        Owner savedOwner;
+
+        try {
+            savedOwner = ownerService.registerOwner(owner.getUsername(), owner.getPassword(), owner.getEmail());
+        } catch (UsernameAlreadyTakenException e) {
+            return new ResponseEntity<>(BAD_REQUEST); // returning 500 internal error when supposed to return 400 bad request
+        }
+        return new ResponseEntity<>(savedOwner, CREATED);
     }
 
     @GetMapping

@@ -1,14 +1,10 @@
 package com.revature.airbnb.Models;
 
-import java.util.List;
-
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToMany;
 
 @MappedSuperclass
 public class User {
@@ -17,23 +13,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
+    @Column(unique = true)
     private String username;
     private String password;
     private String email;
 
-    // add renter_id foreign key in bookings table
-    // in users class bc both renters and owners can be renters
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_renter_id")
-    private List<Booking> bookingHistory;
-
     public User() {}
 
-    public User(String username, String password, String email, List<Booking> bookingHistory) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.bookingHistory = bookingHistory;
     }
     public int getUserId() {
         return userId;
@@ -59,12 +49,5 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    public List<Booking> getBookingHistory() {
-        return bookingHistory;
-    }
-    public void setBookingHistory(List<Booking> bookingHistory) {
-        this.bookingHistory = bookingHistory;
-    }
-
 
 }
