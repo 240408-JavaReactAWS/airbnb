@@ -6,11 +6,16 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="renter")
 public class Renter extends User {
-    
+
     public Renter()
     {
-        super();
+    }
+    public int getRenterId() {
+        return this.userId;
     }
 
+    public void setRenterId(int userId) {
+        this.userId = userId;
+    }
     
 }

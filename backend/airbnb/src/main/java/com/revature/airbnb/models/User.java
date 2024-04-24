@@ -2,52 +2,35 @@ package com.revature.airbnb.models;
 
 import java.util.List;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
-@MappedSuperclass
-public class User {
+import jakarta.persistence.OneToMany;
+
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    protected int userId;
+    protected String username;
+    protected String password;
 
-    private String username;
-    private String password;
-    private List<Listing> listings;
-
-    public int getId() {
-        return this.userId;
-    }
-
-    public void setId(int id) {
-        this.userId = id;
-    }
+    @OneToMany(mappedBy = "user")
+    protected List<Booking> bookings;
 
     //No-args constructor for Jackston databind
     public User(){ }
-
-    public User(int id, String username, String password)
-    {
-        this.userId = id;
-        this.username = username;
-        this.password = password;
-    }
 
     public User(String username, String password)
     {
         this.username = username;
         this.password = password;
-    }
-
-    public int getUserId() {
-        return this.userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public String getUsername() {
@@ -65,13 +48,22 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    public List<Listing> getListings() {
-        return this.listings;
+
+
+    public int getUserId() {
+        return this.userId;
     }
 
-    public void setItems(List<Listing> listings) {
-        this.listings = listings;
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public List<Booking> getBookings() {
+        return this.bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
 }

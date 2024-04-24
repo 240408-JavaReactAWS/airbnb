@@ -15,6 +15,7 @@ import com.revature.airbnb.models.Renter;
 @RequestMapping("/renters")
 @ResponseBody
 public class RenterController {
+    
     @Autowired
     private RenterService renterService;
 
@@ -27,6 +28,7 @@ public class RenterController {
     {
         return new ResponseEntity<List<Renter>>(renterService.getAllUsers(), HttpStatus.OK);
     }
+    
     @PostMapping("/register")
     public ResponseEntity<Renter> registerRenterHandler(@RequestBody Renter user)
     {

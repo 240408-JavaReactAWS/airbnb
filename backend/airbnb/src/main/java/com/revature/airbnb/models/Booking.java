@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -18,10 +19,12 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //It should be auto-generated
     private int bookingId;
 
-    //@ManyToOne(fetch=FetchType.EAGER)
-    //@JoinColumn(name = "fk_user_id")
-    private Renter renter;
-    private int propertyId;
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name = "fk_user_id")
+    private User user;
+
+    @OneToOne
+    private Listing listing;
     private Date startDate;
     private Date endDate;
     private String status;
@@ -32,7 +35,6 @@ public class Booking {
 
     }
 
-
     public int getBookingId() {
         return this.bookingId;
     }
@@ -41,20 +43,20 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public Renter getRenter() {
-        return this.renter;
+    public User getUser() {
+        return this.user;
     }
 
-    public void setRenter(Renter renter) {
-        this.renter = renter;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getPropertyId() {
-        return this.propertyId;
+    public Listing getListing() {
+        return this.listing;
     }
 
-    public void setPropertyId(int propertyId) {
-        this.propertyId = propertyId;
+    public void setListing(Listing listing) {
+        this.listing = listing;
     }
 
     public Date getStartDate() {

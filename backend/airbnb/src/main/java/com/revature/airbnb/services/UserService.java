@@ -1,7 +1,6 @@
 package com.revature.airbnb.services;
 
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import com.revature.airbnb.models.User;
 public class UserService {
 
     @Autowired
-    private UserDAO userDAO;;
+    private UserDAO userDAO;
     
     public UserService(UserDAO userDAO) {
         this.userDAO = userDAO;

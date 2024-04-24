@@ -19,9 +19,10 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int listingId;
 
-    //@ManyToOne
-    //@JoinColumn(name = "fk_user_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "fk_user_id", nullable = false)
     private Owner owner;
+
     private String address;
     private String city;
     private String state;
@@ -31,7 +32,6 @@ public class Listing {
     //No-args constructor for Jackson databind
     public Listing() {
     }
-
 
     public int getListingId() {
         return this.listingId;

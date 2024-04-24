@@ -15,6 +15,7 @@ import com.revature.airbnb.services.UserService;
 @RequestMapping("/users")
 @ResponseBody
 public class UserController {
+    
     @Autowired
     private UserService userService;
 
