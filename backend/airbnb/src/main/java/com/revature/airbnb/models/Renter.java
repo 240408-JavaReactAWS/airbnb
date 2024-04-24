@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="renter")
+@Table(name="renters")
 public class Renter extends User {
 
     public Renter()

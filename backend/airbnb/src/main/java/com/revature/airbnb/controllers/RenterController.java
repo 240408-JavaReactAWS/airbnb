@@ -15,7 +15,7 @@ import com.revature.airbnb.models.Renter;
 @RequestMapping("/renters")
 @ResponseBody
 public class RenterController {
-    
+
     @Autowired
     private RenterService renterService;
 

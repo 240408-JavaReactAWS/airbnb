@@ -2,6 +2,7 @@ package com.revature.airbnb.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,9 +11,11 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "users")
 public abstract class User {
 
     @Id
@@ -20,8 +23,9 @@ public abstract class User {
     protected int userId;
     protected String username;
     protected String password;
+    protected String email;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     protected List<Booking> bookings;
 
     //No-args constructor for Jackston databind
@@ -64,6 +68,14 @@ public abstract class User {
 
     public void setBookings(List<Booking> bookings) {
         this.bookings = bookings;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
 }
