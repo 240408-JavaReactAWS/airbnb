@@ -4,22 +4,17 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
+import com.revature.airbnb.Exceptions.InvalidRegistrationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Services.OwnerService;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
+import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/owners")
@@ -32,7 +27,7 @@ public class OwnerController {
         this.ownerService = ownerService;
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<Owner> registerOwner(@RequestBody Owner owner) {
         Owner savedOwner;
 
@@ -42,6 +37,18 @@ public class OwnerController {
             return new ResponseEntity<>(BAD_REQUEST); // returning 500 internal error when supposed to return 400 bad request
         }
         return new ResponseEntity<>(savedOwner, CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner)
+    {
+        return ResponseEntity.ok(ownerService.login(owner.getUsername(), owner.getPassword()));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Owner> logoutHandler(@RequestBody String token)
+    {
+        return ResponseEntity.ok(ownerService.logout(token));
     }
 
     @GetMapping
@@ -59,5 +66,24 @@ public class OwnerController {
         }
     }
 
+    @ExceptionHandler(InvalidRegistrationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody String handleInvalidRegistration(InvalidRegistrationException e)
+    {
+        return e.getMessage();
+    }
 
+    @ExceptionHandler(UsernameAlreadyTakenException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody String handleUsernameAlreadyTaken(UsernameAlreadyTakenException e)
+    {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(InvalidAuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e)
+    {
+        return e.getMessage();
+    }
 }
