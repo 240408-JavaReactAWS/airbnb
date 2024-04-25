@@ -16,7 +16,7 @@ import com.revature.airbnb.Services.RenterService;
 import static org.springframework.http.HttpStatus.*;
 import org.springframework.http.HttpStatus;
 
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/renters")
 public class RenterController {
