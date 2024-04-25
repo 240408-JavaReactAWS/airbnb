@@ -21,7 +21,6 @@ public class ListingService {
     }
 
     public List<Listing> getAllListings() {
-
         return listingDAO.findAll();
     }
 
@@ -30,8 +29,6 @@ public class ListingService {
     }
 
     public Listing createListing(Owner owner, Listing listing) throws InvalidAuthenticationException{
-
-        listing.setOwner(owner);
         return listingDAO.save(listing);
     }
 }

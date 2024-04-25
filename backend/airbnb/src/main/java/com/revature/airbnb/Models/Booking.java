@@ -1,7 +1,5 @@
 package com.revature.airbnb.Models;
 
-import java.sql.Timestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,15 +15,31 @@ public class Booking {
     @Column(name = "booking_id")
     private int bookingId;
 
-    private Timestamp startDate;
-    private Timestamp endDate;
+    private String startDate;
+    private String endDate;
     private String status; // possibly make enum
+    private int renterId;
+    private int listingId;
 
-    public Booking(int bookingId, Timestamp startDate, Timestamp endDate, String status) {
+    /* for Jackson databind */
+    public Booking() {
+    }
+
+    public Booking(int bookingId, String startDate, String endDate, String status, int renterId, int listingId) {
         this.bookingId = bookingId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
+        this.renterId = renterId;
+        this.listingId = listingId;
+    }
+
+    /* POST /renters/{id}/bookings */
+    public Booking(String startDate, String endDate, String status, int renterId) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.status = status;
+        this.renterId = renterId;
     }
 
     public int getBookingId() {
@@ -36,19 +50,35 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public Timestamp getStartDate() {
+    public int getListingId() {
+        return listingId;
+    }
+
+    public void setListingId(int listingId) {
+        this.listingId = listingId;
+    }
+
+    public int getRenterId() {
+        return renterId;
+    }
+
+    public void setRenterId(int renterId) {
+        this.renterId = renterId;
+    }
+
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 

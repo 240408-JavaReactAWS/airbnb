@@ -35,14 +35,19 @@ public class Listing {
     private String description;
     private String[] photos;
     private String name;
+    // @JsonIgnore // TODO: validate we don't need owner obj
+    // private Owner owner;
+    private int ownerId;
 
     // add listing_id foreign key in bookings table
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_listing_id")
     private List<Booking> bookings;
+
+    public Listing() {}
     
     public Listing(int listingId, String address, String city, String state, String description,
-            String[] photos, String name) {
+        String[] photos, String name, int ownerId) {
         this.listingId = listingId;
         this.address = address;
         this.city = city;
@@ -50,7 +55,28 @@ public class Listing {
         this.description = description;
         this.photos = photos;
         this.name = name;
+        this.ownerId = ownerId;
     }
+
+    public Listing(String address, String city, String state, String description,
+            String[] photos, String name, int ownerId) {
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.description = description;
+        this.photos = photos;
+        this.name = name;
+        this.ownerId = ownerId;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
     public int getListingId() {
         return listingId;
     }
