@@ -79,7 +79,7 @@ public class OwnerController {
     @PostMapping("/{id}/listings")
     public Listing createListing(@RequestBody Listing listing, @PathVariable int id)  {
         Owner owner = ownerService.getOwnerById(id);
-        return listingService.createListing(owner, listing);
+        return listingService.createListing(listing);
     }
   
     @GetMapping("{id}/listings")
