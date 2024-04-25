@@ -9,6 +9,7 @@ import com.revature.airbnb.DAOs.OwnerDAO;
 import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
+import com.revature.airbnb.Models.Listing;
 import com.revature.airbnb.Models.Owner;
 
 @Service
@@ -38,6 +39,12 @@ public class OwnerService {
     public Owner getOwnerById(int id) {
         return ownerDAO.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
+
+    public List<Listing> getOwnerListings(int id) {
+        Owner owner = this.getOwnerById(id);
+        return owner.getListings();
+    }
+
 
     public Owner login(String username, String password) throws InvalidAuthenticationException
     {

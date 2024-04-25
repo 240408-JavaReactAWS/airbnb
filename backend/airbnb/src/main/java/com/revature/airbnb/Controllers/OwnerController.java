@@ -10,6 +10,7 @@ import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.InvalidRegistrationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
+import com.revature.airbnb.Models.Listing;
 import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Services.OwnerService;
 
@@ -65,6 +66,11 @@ public class OwnerController {
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(NOT_FOUND);
         }
+    }
+
+    @GetMapping("{id}/listings")
+    public List<Listing> getAllOwners(@PathVariable int id) {
+        return ownerService.getOwnerListings(id);
     }
 
     @ExceptionHandler(InvalidRegistrationException.class)
