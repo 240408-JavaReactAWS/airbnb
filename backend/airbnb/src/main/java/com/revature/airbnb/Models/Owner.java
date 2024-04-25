@@ -2,6 +2,8 @@ package com.revature.airbnb.Models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -23,6 +25,7 @@ public class Owner extends User{
 
     public Owner(String username, String password, String email, List<Listing> listings) {
         super(username, password, email);
+
         this.listings = listings;
     }
 
