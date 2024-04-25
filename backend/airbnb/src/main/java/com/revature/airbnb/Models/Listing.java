@@ -3,6 +3,8 @@ package com.revature.airbnb.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -21,11 +24,16 @@ public class Listing {
     @Column(name = "listing_id")
     private int listingId;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_owner_id")
+    @JsonIgnore
+    private Owner owner;
+
     private String address;
     private String city;
     private String state;
     private String description;
-    private ArrayList<String> photos;
+    private String[] photos;
     private String name;
 
     // add listing_id foreign key in bookings table
@@ -34,7 +42,7 @@ public class Listing {
     private List<Booking> bookings;
     
     public Listing(int listingId, String address, String city, String state, String description,
-            ArrayList<String> photos, String name) {
+            String[] photos, String name) {
         this.listingId = listingId;
         this.address = address;
         this.city = city;
@@ -73,10 +81,10 @@ public class Listing {
     public void setDescription(String description) {
         this.description = description;
     }
-    public ArrayList<String> getPhotos() {
+    public String[] getPhotos() {
         return photos;
     }
-    public void setPhotos(ArrayList<String> photos) {
+    public void setPhotos(String[] photos) {
         this.photos = photos;
     }
     public String getName() {
@@ -84,6 +92,22 @@ public class Listing {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public List<Booking> getBookings() {
+        return this.bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
 }
