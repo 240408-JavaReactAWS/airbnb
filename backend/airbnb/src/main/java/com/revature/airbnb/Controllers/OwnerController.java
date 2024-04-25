@@ -14,6 +14,7 @@ import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import com.revature.airbnb.Models.Listing;
 import com.revature.airbnb.Models.Owner;
+import com.revature.airbnb.Services.ListingService;
 import com.revature.airbnb.Services.OwnerService;
 
 import static org.springframework.http.HttpStatus.*;
@@ -25,10 +26,12 @@ import org.springframework.http.HttpStatus;
 public class OwnerController {
 
     private final OwnerService ownerService;
+    private final ListingService listingService;
 
     @Autowired
-    public OwnerController(OwnerService ownerService) {
+    public OwnerController(OwnerService ownerService, ListingService listingService) {
         this.ownerService = ownerService;
+        this.listingService = listingService;
     }
 
     @PostMapping("/register")
@@ -73,7 +76,12 @@ public class OwnerController {
             return new ResponseEntity<>(NOT_FOUND);
         }
     }
-
+    @PostMapping("/{id}/listings")
+    public Listing createListing(@RequestBody Listing listing, @PathVariable int id)  {
+        Owner owner = ownerService.getOwnerById(id);
+        return listingService.createListing(owner, listing);
+    }
+  
     @GetMapping("{id}/listings")
     public List<Listing> getAllOwners(@PathVariable int id) {
         return ownerService.getOwnerListings(id);

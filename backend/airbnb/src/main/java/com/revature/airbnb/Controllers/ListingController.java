@@ -7,15 +7,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Models.Listing;
 import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Services.ListingService;
 import com.revature.airbnb.Services.OwnerService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RestController
 @RequestMapping("/listings")
@@ -35,11 +44,20 @@ public class ListingController {
         return listingService.getAllListings();
     }
 
+
     /* Adding in Sean's code manually so that I can QA my POST /listings */
     @PostMapping
     public ResponseEntity<Listing> createListing(@RequestBody Listing listing, @RequestParam String token)  {
         Owner owner = ownerService.getOwnerByToken(token);
         listing.setOwnerId(owner.getUserId());
         return new ResponseEntity<>(listingService.createListing(listing), HttpStatus.CREATED);
+    }
+  
+    @ExceptionHandler(InvalidAuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e)
+    {
+        return e.getMessage();
+
     }
 }

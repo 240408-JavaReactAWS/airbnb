@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -23,11 +24,16 @@ public class Listing {
     @Column(name = "listing_id")
     private int listingId;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_owner_id")
+    @JsonIgnore
+    private Owner owner;
+
     private String address;
     private String city;
     private String state;
     private String description;
-    private ArrayList<String> photos;
+    private String[] photos;
     private String name;
     // @JsonIgnore // TODO: validate we don't need owner obj
     // private Owner owner;
@@ -41,7 +47,7 @@ public class Listing {
     public Listing() {}
     
     public Listing(int listingId, String address, String city, String state, String description,
-            ArrayList<String> photos, String name, int ownerId) {
+        String[] photos, String name, int ownerId) {
         this.listingId = listingId;
         this.address = address;
         this.city = city;
@@ -53,7 +59,7 @@ public class Listing {
     }
 
     public Listing(String address, String city, String state, String description,
-            ArrayList<String> photos, String name, int ownerId) {
+            String[] photos, String name, int ownerId) {
         this.address = address;
         this.city = city;
         this.state = state;
@@ -101,10 +107,10 @@ public class Listing {
     public void setDescription(String description) {
         this.description = description;
     }
-    public ArrayList<String> getPhotos() {
+    public String[] getPhotos() {
         return photos;
     }
-    public void setPhotos(ArrayList<String> photos) {
+    public void setPhotos(String[] photos) {
         this.photos = photos;
     }
     public String getName() {
@@ -112,6 +118,22 @@ public class Listing {
     }
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner(Owner owner) {
+        this.owner = owner;
+    }
+
+    public List<Booking> getBookings() {
+        return this.bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
 }
