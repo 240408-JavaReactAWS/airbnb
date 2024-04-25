@@ -1,6 +1,8 @@
 package com.revature.airbnb.Controllers;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,10 +61,14 @@ public class OwnerController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Owner> getOwnerById(@PathVariable int id) {
+    public ResponseEntity<Map<String, Object>> viewAccountDetails(@PathVariable int id) {
         try {
             Owner owner = ownerService.getOwnerById(id);
-            return new ResponseEntity<>(owner, OK);
+            Map<String, Object> accountDetails = new LinkedHashMap<>();
+            accountDetails.put("username", owner.getUsername());
+            accountDetails.put("email", owner.getEmail());
+            accountDetails.put("listings", owner.getListings());
+            return new ResponseEntity<>(accountDetails, OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(NOT_FOUND);
         }
