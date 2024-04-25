@@ -16,7 +16,10 @@ public class ListingService {
     }
 
     public List<Listing> getAllListings() {
-
         return listingDAO.findAll();
+    }
+
+    public Listing createListing(Listing listing) {
+        return listingDAO.save(listing);
     }
 }

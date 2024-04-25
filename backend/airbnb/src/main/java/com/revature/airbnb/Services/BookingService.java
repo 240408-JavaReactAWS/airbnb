@@ -1,9 +1,7 @@
 package com.revature.airbnb.Services;
 
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.revature.airbnb.DAOs.BookingDAO;
 import com.revature.airbnb.Models.Booking;
 
@@ -17,5 +15,9 @@ public class BookingService {
 
     public List<Booking> getAllBookings() {
         return bookingDAO.findAll();
+    }
+    
+    public Booking createBooking(Booking booking) {
+        return bookingDAO.save(booking);
     }
 }

@@ -3,18 +3,15 @@ package com.revature.airbnb.Controllers;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.InvalidRegistrationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import com.revature.airbnb.Models.Renter;
 import com.revature.airbnb.Services.RenterService;
-
 import static org.springframework.http.HttpStatus.*;
 import org.springframework.http.HttpStatus;
 
@@ -59,20 +56,6 @@ public class RenterController {
     public List<Renter> getAllRenters() {
         return renterService.getAllRenters();
     }
-
-    /*@GetMapping("{id}")
-    public ResponseEntity<Map<String, Object>> viewAccountDetails(@PathVariable int id) {
-        try {
-            Renter renter = renterService.getRenterById(id);
-            Map<String, Object> accountDetails = new LinkedHashMap<>();
-            accountDetails.put("username", renter.getUsername());
-            accountDetails.put("email", renter.getEmail());
-            accountDetails.put("bookings", renter.getbookings());
-            return new ResponseEntity<>(accountDetails, OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
-    }*/
 
     @GetMapping("{id}")
     public ResponseEntity<Map<String, Object>> viewAccountDetails(@PathVariable int id) {

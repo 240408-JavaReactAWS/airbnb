@@ -64,4 +64,9 @@ public class OwnerService {
         ownerDAO.save(toRet);
         return toRet;
     }
+
+    public Owner getOwnerByToken(String token) {
+        return ownerDAO.findByToken(token).orElseThrow(() -> new UserNotFoundException("User not found with token: " + token));
+    }
+
 }
