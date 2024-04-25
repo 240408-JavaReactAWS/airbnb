@@ -28,7 +28,7 @@ public class ListingService {
         return listingDAO.findById(id).orElseThrow(() -> new RuntimeException("Listing not found with id: " + id));
     }
 
-    public Listing createListing(Owner owner, Listing listing) throws InvalidAuthenticationException{
+    public Listing createListing(Listing listing) throws InvalidAuthenticationException{
         return listingDAO.save(listing);
     }
 }
