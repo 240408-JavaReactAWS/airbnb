@@ -25,4 +25,12 @@ public class BookingController {
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
     }
+
+    /*
+    @GetMapping("/pending")
+    public List<Booking> getBookingsById(int id)
+    {
+        return bookingService.getPendingBookings(id);
+    }
+    */
 }

@@ -10,7 +10,9 @@ import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.InvalidRegistrationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
+import com.revature.airbnb.Models.Booking;
 import com.revature.airbnb.Models.Renter;
+import com.revature.airbnb.Services.BookingService;
 import com.revature.airbnb.Services.RenterService;
 
 import static org.springframework.http.HttpStatus.*;
@@ -22,10 +24,12 @@ import org.springframework.http.HttpStatus;
 public class RenterController {
 
     private final RenterService renterService;
+    private final BookingService bookingService;
 
     @Autowired
-    public RenterController(RenterService renterService) {
+    public RenterController(RenterService renterService, BookingService bookingService) {
         this.renterService = renterService;
+        this.bookingService = bookingService;
     }
 
     @PostMapping("/register")
@@ -68,6 +72,12 @@ public class RenterController {
         }
     }
 
+    @GetMapping("/{id}/bookings")
+    public ResponseEntity<List<Booking>> getRenterBookings(@PathVariable int id) {
+            Renter renter = renterService.getRenterById(id);
+            return new ResponseEntity<>(bookingService.getBookingsByRenter(renter), OK);
+    }
+
     @ExceptionHandler(InvalidRegistrationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody String handleInvalidRegistration(InvalidRegistrationException e)
@@ -88,5 +98,12 @@ public class RenterController {
     {
         return e.getMessage();
     }   
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public @ResponseBody String UserNotFoundHandler(UserNotFoundException e)
+    {
+        return e.getMessage();
+    }
 }
 

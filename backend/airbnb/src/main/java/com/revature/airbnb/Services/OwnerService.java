@@ -39,6 +39,10 @@ public class OwnerService {
         return ownerDAO.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
+    public Owner getOwnerByToken(String token) {
+        return ownerDAO.findByToken(token).orElseThrow(() -> new UserNotFoundException("User not found with token: " + token));
+    }
+
     public Owner login(String username, String password) throws InvalidAuthenticationException
     {
         Owner toRet = ownerDAO.findByUsernameAndPassword(username, password).orElseThrow(() -> new InvalidAuthenticationException(

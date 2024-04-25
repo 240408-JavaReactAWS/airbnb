@@ -71,12 +71,6 @@ public class OwnerController {
         }
     }
 
-    @PostMapping("/{id}/listings")
-    public Listing createListing(@RequestBody Listing listing, @PathVariable int id)  {
-        Owner owner = ownerService.getOwnerById(id);
-        return listingService.createListing(owner, listing);
-    }
-
     @ExceptionHandler(InvalidRegistrationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody String handleInvalidRegistration(InvalidRegistrationException e)
@@ -94,6 +88,13 @@ public class OwnerController {
     @ExceptionHandler(InvalidAuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e)
+    {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public @ResponseBody String UserNotFoundHandler(UserNotFoundException e)
     {
         return e.getMessage();
     }

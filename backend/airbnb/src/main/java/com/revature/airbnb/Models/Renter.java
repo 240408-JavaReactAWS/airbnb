@@ -13,7 +13,7 @@ import jakarta.persistence.Table;
 public class Renter extends User{
 
     public Renter() {
-        super();
+        
     }
 
     // add renter_id foreign key in bookings table

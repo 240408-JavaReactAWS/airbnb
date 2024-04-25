@@ -41,6 +41,9 @@ public class Listing {
     @JoinColumn(name = "fk_listing_id")
     private List<Booking> bookings;
     
+public Listing() {
+    }
+
     public Listing(int listingId, String address, String city, String state, String description,
             String[] photos, String name) {
         this.listingId = listingId;

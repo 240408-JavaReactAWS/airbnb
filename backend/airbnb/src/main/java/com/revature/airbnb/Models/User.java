@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 
 @MappedSuperclass
 public class User {
@@ -23,7 +24,7 @@ public class User {
     private String email;
     @Column(unique = true)
     private String token;
-    //Let's figure out how to hide this later
+    @Transient
     private final String tokenChars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public User() {}

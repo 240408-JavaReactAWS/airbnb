@@ -20,7 +20,7 @@ public class Owner extends User{
     private List<Listing> listings;
 
     public Owner() {
-        super();
+      
     }
 
     public Owner(String username, String password, String email, List<Listing> listings) {
