@@ -7,6 +7,5 @@ import com.revature.airbnb.Models.Booking;
 
 @Repository
 public interface BookingDAO extends JpaRepository<Booking, Integer>{
-
     
 }
