@@ -34,11 +34,11 @@ public class RenterService {
         return renterDAO.save(newRenter);
     }
 
-    public Renter getRenterById(int id) {
+    public Renter getRenterById(int id) throws UserNotFoundException {
         return renterDAO.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
-    public Renter getRenterByToken(String token) {
+    public Renter getRenterByToken(String token) throws UserNotFoundException {
         return renterDAO.findByToken(token).orElseThrow(() -> new UserNotFoundException("User not found with token: " + token));
     }
 
