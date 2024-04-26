@@ -33,12 +33,13 @@ public class BookingController {
         this.renterService = renterService;
     }
 
+    /*This function retrieves all bookings from the Bookings table */
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
     }
 
-    /* From GET /listings/id, create a new Booking */
+    /*This function adds an entry in the Bookings table, using a token from a User to determine its creator */
     @PostMapping
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, @RequestParam String token) {
         try {

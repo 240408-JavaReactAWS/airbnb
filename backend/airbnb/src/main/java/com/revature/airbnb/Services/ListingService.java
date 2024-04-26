@@ -24,6 +24,11 @@ public class ListingService {
         return listingDAO.findAll();
     }
 
+    /* This method is used to get all listings by a specific owner */
+    public List<Listing> getListingsByOwner(Owner owner) {
+        return listingDAO.findByOwner(owner);
+    } 
+
     public Listing getListingById(int id) {
         return listingDAO.findById(id).orElseThrow(() -> new RuntimeException("Listing not found with id: " + id));
     }
