@@ -34,6 +34,7 @@ public class OwnerController {
         this.listingService = listingService;
     }
 
+    /*This function registers an Owner by adding their username, password, and email to the Owners table */
     @PostMapping("/register")
     public ResponseEntity<Owner> registerOwner(@RequestBody Owner owner) {
         Owner savedOwner;
@@ -46,18 +47,21 @@ public class OwnerController {
         return new ResponseEntity<>(savedOwner, CREATED);
     }
 
+    /*This function logs in an Owner by adding their token to the Owners table */
     @PostMapping("/login")
     public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner)
     {
         return ResponseEntity.ok(ownerService.login(owner.getUsername(), owner.getPassword()));
     }
 
+    /*This function logs out an Owner by removing their token from the Owners table */
     @PostMapping("/logout")
     public ResponseEntity<Owner> logoutHandler(@RequestBody String token)
     {
         return ResponseEntity.ok(ownerService.logout(token));
     }
 
+    /*This function retrieves all Owners from the Owners table */
     @GetMapping
     public List<Owner> getAllOwners() {
         return ownerService.getAllOwners();
@@ -76,12 +80,15 @@ public class OwnerController {
             return new ResponseEntity<>(NOT_FOUND);
         }
     }
+
+    /* This function adds an entry in the Listings table, using the Owner's ID to determine its creator */
     @PostMapping("/{id}/listings")
     public Listing createListing(@RequestBody Listing listing, @PathVariable int id)  {
         Owner owner = ownerService.getOwnerById(id);
         return listingService.createListing(listing);
     }
   
+    /* This function retrieves all listings for a particular Owner, using the Owner's ID */
     @GetMapping("{id}/listings")
     public List<Listing> getAllOwners(@PathVariable int id) {
         return ownerService.getOwnerListings(id);

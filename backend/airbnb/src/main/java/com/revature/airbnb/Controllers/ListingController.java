@@ -39,13 +39,14 @@ public class ListingController {
         this.ownerService = ownerService;
     }
 
+    /* This function retrieves all listings from the Listings table */
     @GetMapping
     public List<Listing> getAllListings() {
         return listingService.getAllListings();
     }
 
 
-    /* Adding in Sean's code manually so that I can QA my POST /listings */
+    /* This function adds an entry in the Listings table, using a token from an Owner to determine its creator */
     @PostMapping
     public ResponseEntity<Listing> createListing(@RequestBody Listing listing, @RequestParam String token)  {
         Owner owner = ownerService.getOwnerByToken(token);

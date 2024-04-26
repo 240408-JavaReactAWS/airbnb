@@ -20,4 +20,9 @@ public class BookingService {
     public Booking createBooking(Booking booking) {
         return bookingDAO.save(booking);
     }
+
+    /*This function retrieves all Bookings by their associated Renter ID */
+    public List<Booking> getBookingsByRenterId(int renterId) {
+        return bookingDAO.findByRenterId(renterId);
+    }
 }
