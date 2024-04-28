@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -22,14 +21,11 @@ public class Listing {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int listingId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id")
-    private Owner owner;
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "listing_id")
+    @JoinColumn(name = "listingId")
     private List<Booking> bookings;
 
+    private int ownerId;
     private String address;
     private String city;
     private String state;
@@ -38,13 +34,13 @@ public class Listing {
     private String name;
     
     public Listing(String address, String city, String state, String description,
-        String[] photos, String name, Owner owner) {
+        String[] photos, String name, int ownerId) {
         this.address = address;
         this.city = city;
         this.state = state;
         this.description = description;
         this.photos = photos;
         this.name = name;
-        this.owner = owner;
+        this.ownerId = ownerId;
     }
 }

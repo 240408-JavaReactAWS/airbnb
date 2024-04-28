@@ -38,21 +38,17 @@ public class ListingController {
         return listingService.getAllListings();
     }
 
-
     /* This function adds an entry in the Listings table, using a token from an Owner to determine its creator */
     @PostMapping
     public ResponseEntity<Listing> createListing(@RequestBody Listing listing, @RequestParam String token)  {
         Owner owner = ownerService.getOwnerByToken(token);
-        // TODO: create association between owner and listing
-        // listing.setOwnerId(owner.getUserId());
+        listing.setOwnerId(owner.getUserId());
         return new ResponseEntity<>(listingService.createListing(listing), HttpStatus.CREATED);
     }
   
     @ExceptionHandler(InvalidAuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e)
-    {
+    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e) {
         return e.getMessage();
-
     }
 }

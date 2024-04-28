@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.revature.airbnb.Exceptions.BookingNotFoundException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Models.Booking;
+import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Models.Renter;
 import com.revature.airbnb.Services.BookingService;
 import com.revature.airbnb.Services.RenterService;
@@ -47,21 +48,12 @@ public class BookingController {
     /* TODO: Controllers should handle exceptions, not throw them */
     @PostMapping
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, @RequestParam String token) {
-        try {
-            Renter loggedInRenter = renterService.getRenterByToken(token);
-            if (loggedInRenter != null) {
-                // TODO: create association between renter and booking
-                // booking.setRenterId(loggedInRenter.getUserId());
-                Booking newBooking = bookingService.createBooking(booking);
-                return new ResponseEntity<>(newBooking, CREATED);
-            }
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
-        return null;
+        Renter renter = renterService.getRenterByToken(token);
+        booking.setRenterId(renter.getUserId());
+        return new ResponseEntity<>(bookingService.createBooking(booking), HttpStatus.CREATED);
     }
 
-    /*This function allows an Owner to update a booking's status using its booking ID */
+    /* As an owner, update a booking's status */
     @PatchMapping("/{bookingId}")
     public ResponseEntity<Booking> updateBooking(@RequestBody String status, @RequestParam String token, @PathVariable int bookingId) {
         return new ResponseEntity<>
@@ -80,8 +72,7 @@ public class BookingController {
 
     @ExceptionHandler(BookingNotFoundException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public @ResponseBody String BookingNotFoundHandler(BookingNotFoundException e)
-    {
+    public @ResponseBody String BookingNotFoundHandler(BookingNotFoundException e) {
         return e.getMessage();
     }   
 }

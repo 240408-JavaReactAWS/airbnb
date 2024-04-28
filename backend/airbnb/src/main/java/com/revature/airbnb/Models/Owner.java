@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "owners")
 public class Owner extends User {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "ownerId")
     private List<Listing> listings;
 
     public Owner() {

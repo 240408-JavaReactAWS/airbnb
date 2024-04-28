@@ -19,7 +19,7 @@ public class Renter extends User {
     }
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "renter_id")
+    @JoinColumn(name = "renterId")
     private List<Booking> bookings;
 
     public Renter(String username, String password, String email, List<Booking> bookings) {

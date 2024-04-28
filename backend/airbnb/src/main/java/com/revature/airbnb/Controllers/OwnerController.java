@@ -42,26 +42,23 @@ public class OwnerController {
     @PostMapping("/register")
     public ResponseEntity<Owner> registerOwner(@RequestBody Owner owner) {
         Owner savedOwner;
-
         try {
             savedOwner = ownerService.registerOwner(owner.getUsername(), owner.getPassword(), owner.getEmail());
         } catch (UsernameAlreadyTakenException e) {
-            return new ResponseEntity<>(BAD_REQUEST); // returning 500 internal error when supposed to return 400 bad request
+            return new ResponseEntity<>(BAD_REQUEST); // TODO: returning 500 internal error when supposed to return 400 bad request
         }
         return new ResponseEntity<>(savedOwner, CREATED);
     }
 
     /*This function logs in an Owner by adding their token to the Owners table */
     @PostMapping("/login")
-    public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner)
-    {
+    public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner) {
         return ResponseEntity.ok(ownerService.login(owner.getUsername(), owner.getPassword()));
     }
 
     /*This function logs out an Owner by removing their token from the Owners table */
     @PostMapping("/logout")
-    public ResponseEntity<Owner> logoutHandler(@RequestBody String token)
-    {
+    public ResponseEntity<Owner> logoutHandler(@RequestBody String token) {
         return ResponseEntity.ok(ownerService.logout(token));
     }
 
@@ -84,20 +81,6 @@ public class OwnerController {
             return new ResponseEntity<>(NOT_FOUND);
         }
     }
-
-    /* This function retrieves all listings for a particular Owner, using the Owner's ID */
-    // @GetMapping("{id}/bookings")
-    // public List<Booking> getAllBookings(@PathVariable int id) {
-    //     return bookingService.getBookingsByOwnerId(id);
-    // }
-
-    /* This function adds an entry in the Listings table, using the Owner's ID to determine its creator */
-    @PostMapping("/{id}/listings")
-    public Listing createListing(@RequestBody Listing listing, @PathVariable int id)  {
-        Owner owner = ownerService.getOwnerById(id);
-        // TODO: validate owner before POST action
-        return listingService.createListing(listing);
-    }
   
     /* This function retrieves all listings for a particular Owner, using the Owner's ID */
     @GetMapping("{id}/listings")
@@ -107,22 +90,19 @@ public class OwnerController {
 
     @ExceptionHandler(InvalidRegistrationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public @ResponseBody String handleInvalidRegistration(InvalidRegistrationException e)
-    {
+    public @ResponseBody String handleInvalidRegistration(InvalidRegistrationException e) {
         return e.getMessage();
     }
 
     @ExceptionHandler(UsernameAlreadyTakenException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public @ResponseBody String handleUsernameAlreadyTaken(UsernameAlreadyTakenException e)
-    {
+    public @ResponseBody String handleUsernameAlreadyTaken(UsernameAlreadyTakenException e) {
         return e.getMessage();
     }
 
     @ExceptionHandler(InvalidAuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e)
-    {
+    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e) {
         return e.getMessage();
     }
 }
