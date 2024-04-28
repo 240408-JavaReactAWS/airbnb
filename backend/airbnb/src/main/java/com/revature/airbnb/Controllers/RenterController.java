@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
@@ -16,28 +17,29 @@ import com.revature.airbnb.Models.Renter;
 import com.revature.airbnb.Services.ListingService;
 import com.revature.airbnb.Services.RenterService;
 import static org.springframework.http.HttpStatus.*;
-import org.springframework.http.HttpStatus;
+import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}, allowCredentials = "true")
 @RestController
 @RequestMapping("/renters")
 public class RenterController {
 
-    private final RenterService renterService;
-    private final ListingService listingService;
+    private final RenterService rs;
+    private final ListingService ls;
 
     @Autowired
-    public RenterController(RenterService renterService, ListingService listingService) {
-        this.renterService = renterService;
-        this.listingService = listingService;
+    public RenterController(RenterService rs, ListingService ls) {
+        this.rs = rs;
+        this.ls = ls;
     }
 
-    /*This function registers a Renter by adding their username, password, and email to the Renters table */
-    @PostMapping("/register")
-    public ResponseEntity<Renter> registerRenter(@RequestBody Renter renter) {
+    /* Creates new Renter */
+    @PostMapping("register")
+    public ResponseEntity<Renter> registerRenter(@RequestBody Renter renter, HttpSession session) {
         Renter savedRenter;
         try {
-            savedRenter = renterService.registerRenter(renter.getUsername(), renter.getPassword(), renter.getEmail());
+            savedRenter = rs.registerRenter(renter.getUsername(), renter.getPassword(), renter.getEmail());
+            session.setAttribute("renter", savedRenter); // Store the renter in the session
         } catch (UsernameAlreadyTakenException e) {
             return new ResponseEntity<>(BAD_REQUEST);
         }
@@ -47,26 +49,26 @@ public class RenterController {
     /*This function logs in a Renter by adding their token to the Renters table */
     @PostMapping("/login")
     public ResponseEntity<Renter> loginHandler(@RequestBody Renter renter) {
-        return ResponseEntity.ok(renterService.login(renter.getUsername(), renter.getPassword()));
+        return ResponseEntity.ok(rs.login(renter.getUsername(), renter.getPassword()));
     }
 
     /*This function logs out a Renter by removing their token from the Renters table */
     @PostMapping("/logout")
     public ResponseEntity<Renter> logoutHandler(@RequestBody String token) {
-        return ResponseEntity.ok(renterService.logout(token));
+        return ResponseEntity.ok(rs.logout(token));
     }
 
     /*This function retrieves all renters from the Renters table */
     @GetMapping
     public List<Renter> getAllRenters() {
-        return renterService.getAllRenters();
+        return rs.getAllRenters();
     }
 
     /*This function retrieves a renter by their id from the Renters table */
     @GetMapping("{id}")
     public ResponseEntity<Map<String, Object>> viewAccountDetails(@PathVariable int id) {
         try {
-            Renter renter = renterService.getRenterById(id);
+            Renter renter = rs.getRenterById(id);
             Map<String, Object> accountDetails = new LinkedHashMap<>();
             accountDetails.put("username", renter.getUsername());
             accountDetails.put("email", renter.getEmail());
@@ -80,27 +82,27 @@ public class RenterController {
     /* Returns all listings for which a renter sent a booking request */
     @GetMapping("{id}/listings")
     public ResponseEntity<List<Listing>> viewListings(@PathVariable int id, @RequestParam String token) {
-        Renter renter = renterService.getRenterByToken(token);
+        Renter renter = rs.getRenterByToken(token);
         List<Listing> listings = renter.getBookings().stream().map((Booking booking) -> {
-            return listingService.getListingById(booking.getListingId());
+            return ls.getListingById(booking.getListingId());
         }).toList();
         return new ResponseEntity<>(listings, OK);
     }
 
     @ExceptionHandler(InvalidRegistrationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     public @ResponseBody String handleInvalidRegistration(InvalidRegistrationException e) {
         return e.getMessage();
     }
 
     @ExceptionHandler(UsernameAlreadyTakenException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     public @ResponseBody String handleUsernameAlreadyTaken(UsernameAlreadyTakenException e) {
         return e.getMessage();
     }
 
     @ExceptionHandler(InvalidAuthenticationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e) {
         return e.getMessage();
     }   
