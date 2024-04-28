@@ -2,10 +2,7 @@ package com.revature.airbnb.Controllers;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.revature.airbnb.Exceptions.BookingNotFoundException;
-import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Models.Booking;
-import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Models.Renter;
 import com.revature.airbnb.Services.BookingService;
 import com.revature.airbnb.Services.RenterService;
-import com.revature.airbnb.Services.OwnerService;
 
 @RestController
 @RequestMapping("/bookings")
@@ -37,13 +30,11 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final RenterService renterService;
-    private final OwnerService ownerService;
 
     @Autowired
-    public BookingController(BookingService bookingService, RenterService renterService, OwnerService ownerService) {
+    public BookingController(BookingService bookingService, RenterService renterService) {
         this.bookingService = bookingService;
         this.renterService = renterService;
-        this.ownerService = ownerService;
     }
 
     /*This function retrieves all bookings from the Bookings table */
@@ -59,7 +50,8 @@ public class BookingController {
         try {
             Renter loggedInRenter = renterService.getRenterByToken(token);
             if (loggedInRenter != null) {
-                booking.setRenterId(loggedInRenter.getUserId());
+                // TODO: create association between renter and booking
+                // booking.setRenterId(loggedInRenter.getUserId());
                 Booking newBooking = bookingService.createBooking(booking);
                 return new ResponseEntity<>(newBooking, CREATED);
             }

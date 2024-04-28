@@ -5,9 +5,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Entity
+@NoArgsConstructor
 @Table (name = "bookings")
 public class Booking {
     @Id
@@ -15,79 +21,30 @@ public class Booking {
     @Column(name = "booking_id")
     private int bookingId;
 
+    @ManyToOne
+    @JoinColumn(name="renter_id")
+    private Renter renter;
+
+    @ManyToOne
+    @JoinColumn(name="listing_id")
+    private Listing listing;
+
     private String startDate;
     private String endDate;
-    private String status; // possibly make enum
-    private int renterId;
-    private int listingId;
+    private String status; // TODO: make enum
 
-    /* for Jackson databind */
-    public Booking() {
-    }
-
-    public Booking(int bookingId, String startDate, String endDate, String status, int renterId, int listingId) {
-        this.bookingId = bookingId;
+    public Booking(String startDate, String endDate, String status, Renter renter, Listing listing) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.renterId = renterId;
-        this.listingId = listingId;
+        this.renter = renter;
+        this.listing = listing;
     }
 
-    /* POST /renters/{id}/bookings */
-    public Booking(String startDate, String endDate, String status, int renterId) {
+    public Booking(String startDate, String endDate, String status, Renter renter) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-        this.renterId = renterId;
+        this.renter = renter;
     }
-
-    public int getBookingId() {
-        return bookingId;
-    }
-
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
-    }
-
-    public int getListingId() {
-        return listingId;
-    }
-
-    public void setListingId(int listingId) {
-        this.listingId = listingId;
-    }
-
-    public int getRenterId() {
-        return renterId;
-    }
-
-    public void setRenterId(int renterId) {
-        this.renterId = renterId;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
 }

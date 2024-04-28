@@ -73,7 +73,7 @@ public class RenterController {
             Map<String, Object> accountDetails = new LinkedHashMap<>();
             accountDetails.put("username", renter.getUsername());
             accountDetails.put("email", renter.getEmail());
-            accountDetails.put("bookings", renter.getbookings());
+            accountDetails.put("bookings", renter.getBookings());
             return new ResponseEntity<>(accountDetails, OK);
         } catch (UserNotFoundException e) {
             return new ResponseEntity<>(NOT_FOUND);
@@ -81,15 +81,15 @@ public class RenterController {
     }
 
     /*This function retrieves all of the bookings that are associated with a particular Renter */
-    @GetMapping("{id}/bookings")
-    public ResponseEntity<List<Booking>> viewBookings(@PathVariable int id) {
-        try {
-            List<Booking> bookings = bookingService.getBookingsByRenterId(id);
-            return new ResponseEntity<>(bookings, OK);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(NOT_FOUND);
-        }
-    }
+    // @GetMapping("{id}/bookings")
+    // public ResponseEntity<List<Booking>> viewBookings(@PathVariable int id) {
+        // try {
+        //     List<Booking> bookings = bookingService.getBookingsByRenterId(id);
+        //     return new ResponseEntity<>(bookings, OK);
+        // } catch (UserNotFoundException e) {
+        //     return new ResponseEntity<>(NOT_FOUND);
+        // }
+    // }
 
     @ExceptionHandler(InvalidRegistrationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -86,15 +86,16 @@ public class OwnerController {
     }
 
     /* This function retrieves all listings for a particular Owner, using the Owner's ID */
-    @GetMapping("{id}/bookings")
-    public List<Booking> getAllBookings(@PathVariable int id) {
-        return bookingService.getBookingsByOwnerId(id);
-    }
+    // @GetMapping("{id}/bookings")
+    // public List<Booking> getAllBookings(@PathVariable int id) {
+    //     return bookingService.getBookingsByOwnerId(id);
+    // }
 
     /* This function adds an entry in the Listings table, using the Owner's ID to determine its creator */
     @PostMapping("/{id}/listings")
     public Listing createListing(@RequestBody Listing listing, @PathVariable int id)  {
         Owner owner = ownerService.getOwnerById(id);
+        // TODO: validate owner before POST action
         return listingService.createListing(listing);
     }
   

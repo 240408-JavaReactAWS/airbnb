@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.revature.airbnb.DAOs.BookingDAO;
 import com.revature.airbnb.Models.Booking;
+import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Exceptions.BookingNotFoundException;
 
 @Service
@@ -33,13 +34,13 @@ public class BookingService {
         return bookingDAO.save(booking);
     }
 
-    /*This function retrieves all Bookings by their associated Renter ID */
-    public List<Booking> getBookingsByRenterId(int renterId) {
-        return bookingDAO.findByRenterId(renterId);
-    }
+    // /*This function retrieves all Bookings by their associated Renter ID */
+    // public List<Booking> getBookingsByRenterId(int renterId) {
+    //     return bookingDAO.findByRenterId(renterId);
+    // }
 
-    /*This function retrieves all Bookings by their associated Owner ID */
-    public List<Booking> getBookingsByOwnerId(int ownerId) {
-        return bookingDAO.findByOwnerId(ownerId);
-    }
+    // /*This function retrieves all Bookings by their associated Owner ID */
+    // public List<Booking> getBookingsByOwnerId(int ownerId) {
+    //     return bookingDAO.findByOwnerId(ownerId);
+    // }
 }
