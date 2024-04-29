@@ -82,9 +82,9 @@ public class OwnerController {
         try {
             foundOwner = os.getOwnerByUsernameAndId(owner.getUsername(), id);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(FORBIDDEN);
+            return new ResponseEntity<>(NOT_FOUND);
         } catch (InvalidAuthenticationException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
+            return new ResponseEntity<>(FORBIDDEN);
         }
         return new ResponseEntity<>(foundOwner, OK);
     }
@@ -100,9 +100,9 @@ public class OwnerController {
         try {
             foundOwner = os.getOwnerByUsernameAndId(owner.getUsername(), id);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(FORBIDDEN);
+            return new ResponseEntity<>(NOT_FOUND);
         } catch (InvalidAuthenticationException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
+            return new ResponseEntity<>(FORBIDDEN);
         }
         return new ResponseEntity<>(foundOwner.getListings(), OK);
     }
