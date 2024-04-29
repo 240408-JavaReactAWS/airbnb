@@ -2,52 +2,52 @@ package com.revature.airbnb.Controllers;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import static org.springframework.http.HttpStatus.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
-import com.revature.airbnb.Models.Listing;
-import com.revature.airbnb.Models.Owner;
-import com.revature.airbnb.Services.ListingService;
-import com.revature.airbnb.Services.OwnerService;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
+import com.revature.airbnb.Exceptions.*;
+import com.revature.airbnb.Models.*;
+import com.revature.airbnb.Services.*;
+import jakarta.servlet.http.HttpSession;
 
+@CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
 @RestController
-@RequestMapping("/listings")
+@RequestMapping("listings")
 public class ListingController {
 
-    private final ListingService listingService;
-    private final OwnerService ownerService;
+    private final ListingService ls;
 
     @Autowired
-    public ListingController(ListingService listingService, OwnerService ownerService) {
-        this.listingService = listingService;
-        this.ownerService = ownerService;
+    public ListingController(ListingService ls, OwnerService os) {
+        this.ls = ls;
     }
 
-    /* This function retrieves all listings from the Listings table */
+    /* GET /listings */
     @GetMapping
-    public List<Listing> getAllListings() {
-        return listingService.getAllListings();
+    public ResponseEntity<List<Listing>> getAllListings() {
+        return new ResponseEntity<>(ls.getAllListings(), OK);
     }
 
-    /* This function adds an entry in the Listings table, using a token from an Owner to determine its creator */
-    // @PostMapping
-    // public ResponseEntity<Listing> createListing(@RequestBody Listing listing, @RequestParam String token)  {
-    //     Owner owner = ownerService.getOwnerByToken(token);
-    //     listing.setOwnerId(owner.getUserId());
-    //     return new ResponseEntity<>(listingService.createListing(listing), HttpStatus.CREATED);
-    // }
+    /* POST /listings */
+    @PostMapping
+    public ResponseEntity<Listing> createListing(@RequestHeader(name = "owner", required = true) String username, @RequestBody Listing listing, HttpSession session)  {
+        Owner owner = (Owner) session.getAttribute("owner");
+        if (owner == null) {
+            return new ResponseEntity<>(UNAUTHORIZED);
+        }
+        Listing newListing;
+        try {
+            newListing = ls.createListing(listing);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(FORBIDDEN);
+        } catch (InvalidAuthenticationException e) {
+            return new ResponseEntity<>(BAD_REQUEST);
+        }
+        return new ResponseEntity<>(newListing, CREATED);
+    }
   
     @ExceptionHandler(InvalidAuthenticationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(BAD_REQUEST)
     public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e) {
         return e.getMessage();
     }

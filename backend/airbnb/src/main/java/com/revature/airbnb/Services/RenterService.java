@@ -27,11 +27,6 @@ public class RenterService {
         Renter newRenter = new Renter(username, password, email, null);
         return renterDAO.save(newRenter);
     }
-    
-
-    public Renter getRenterById(int id) throws UserNotFoundException {
-        return renterDAO.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
-    }
 
     public Renter getRenterByUsernameAndId(String username, int id) throws UserNotFoundException, InvalidAuthenticationException {
         Optional<Renter> optRenterByUsername = renterDAO.findRenterByUsername(username);

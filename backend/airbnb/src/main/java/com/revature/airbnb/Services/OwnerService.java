@@ -7,7 +7,6 @@ import com.revature.airbnb.DAOs.OwnerDAO;
 import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
-import com.revature.airbnb.Models.Listing;
 import com.revature.airbnb.Models.Owner;
 
 @Service
@@ -16,10 +15,6 @@ public class OwnerService {
 
     public OwnerService(OwnerDAO ownerDAO) {
         this.ownerDAO = ownerDAO;
-    }
-
-    public List<Owner> getAllOwners() {
-        return ownerDAO.findAll();
     }
 
     public Owner registerOwner(String username, String password, String email) throws UsernameAlreadyTakenException {
@@ -32,32 +27,34 @@ public class OwnerService {
         return ownerDAO.save(newOwner);
     }
 
-    public Owner getOwnerById(int id) {
-        return ownerDAO.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+    public Owner getOwnerByUsernameAndId(String username, int id) throws UserNotFoundException, InvalidAuthenticationException {
+        Optional<Owner> optOwnerByUsername = ownerDAO.findOwnerByUsername(username);
+        Optional<Owner> optOwnerById = ownerDAO.findById(id);
+        if (optOwnerByUsername.isEmpty() || optOwnerById.isEmpty()) {
+            throw new UserNotFoundException("No owner found with username " + username + " or id " + id);
+        }
+        Owner returnedOwnerByUsername = optOwnerByUsername.get();
+        Owner returnedOwnerById = optOwnerById.get();
+        if (returnedOwnerByUsername.equals(returnedOwnerById)) {
+            return returnedOwnerById;
+        }
+        throw new InvalidAuthenticationException("Incorrect owner attempting to access account details!");
     }
 
-    public List<Listing> getOwnerListings(int id) {
-        Owner owner = this.getOwnerById(id);
-        return owner.getListings();
+    public List<Owner> getAllOwners() {
+        return ownerDAO.findAll();
     }
 
-
-    public Owner login(String username, String password) throws InvalidAuthenticationException {
-        Owner toRet = ownerDAO.findByUsernameAndPassword(username, password).orElseThrow(() -> new InvalidAuthenticationException(
-            "That username/password combination is not present in the database."));
-        toRet.generateToken();
-        ownerDAO.save(toRet);
-        return toRet;
-    }
-
-    public Owner logout(String token) throws InvalidAuthenticationException {
-        Owner toRet = ownerDAO.findByToken(token).orElseThrow(()-> new InvalidAuthenticationException("Could not find user for corresponding token."));
-        toRet.setToken(null);
-        ownerDAO.save(toRet);
-        return toRet;
-    }
-
-    public Owner getOwnerByToken(String token) {
-        return ownerDAO.findByToken(token).orElseThrow(() -> new UserNotFoundException("User not found with token: " + token));
+    public Owner login(String username, String password) throws InvalidAuthenticationException, UserNotFoundException {
+        Optional<Owner> optOwner = ownerDAO.findByUsernameAndPassword(username, password);
+        if (optOwner.isEmpty()) {
+            throw new UserNotFoundException("No User found with username: " + username);
+        }
+        Owner foundOwner = optOwner.get();
+        if (password.equals(foundOwner.getPassword())){
+            return foundOwner;
+        } else {
+            throw new InvalidAuthenticationException("Username or password was incorrect!");
+        }
     }
 }

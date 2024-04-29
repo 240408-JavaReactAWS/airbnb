@@ -4,19 +4,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.revature.airbnb.Exceptions.InvalidAuthenticationException;
-import com.revature.airbnb.Exceptions.InvalidRegistrationException;
-import com.revature.airbnb.Exceptions.UserNotFoundException;
-import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
-import com.revature.airbnb.Models.Booking;
-import com.revature.airbnb.Models.Listing;
-import com.revature.airbnb.Models.Renter;
-import com.revature.airbnb.Services.ListingService;
-import com.revature.airbnb.Services.RenterService;
+import com.revature.airbnb.Exceptions.*;
+import com.revature.airbnb.Models.*;
+import com.revature.airbnb.Services.*;
 import static org.springframework.http.HttpStatus.*;
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000"}, methods = {RequestMethod.GET, RequestMethod.POST}, allowCredentials = "true")
 @RestController
 @RequestMapping("renters")
 public class RenterController {
@@ -30,7 +24,8 @@ public class RenterController {
         this.ls = ls;
     }
 
-    /* Creates new Renter */
+    /* creates a new renter */
+    /* POST /renters/register */
     @PostMapping("register")
     public ResponseEntity<Renter> registerRenter(@RequestBody Renter renter, HttpSession session) {
         Renter savedRenter;
@@ -44,6 +39,7 @@ public class RenterController {
     }
 
     /* Login existing Renter using HttpSession */
+    /* POST /renters/login */
     @PostMapping("login")
     public ResponseEntity<Renter> loginHandler(@RequestBody Renter renter, HttpSession session) {
         Renter loggedInRenter;
@@ -57,6 +53,7 @@ public class RenterController {
     }
 
     /* Logout existing Renter using HttpSession */
+    /* POST /renters/logout */
     @PostMapping("logout")
     public ResponseEntity<Void> logoutHandler(HttpSession session) {
         session.removeAttribute("renter"); // Remove the renter from the session
@@ -75,8 +72,8 @@ public class RenterController {
 
     /* GET /renters */
     @GetMapping
-    public List<Renter> getAllRenters() {
-        return rs.getAllRenters();
+    public ResponseEntity<List<Renter>> getAllRenters() {
+        return new ResponseEntity<>(rs.getAllRenters(), OK);
     }
 
     /* GET /renters/id */
@@ -97,7 +94,7 @@ public class RenterController {
         return new ResponseEntity<>(foundRenter, OK);
     }
 
-    /* Returns all listings for which a renter sent a booking request */
+    /* GET /renters/id/listings -> returns all listings which a renter sent a booking request */
     @GetMapping("{id}/listings")
     public ResponseEntity<List<Listing>> viewListings(@PathVariable int id, HttpSession session) {
         Renter renter = (Renter) session.getAttribute("renter");

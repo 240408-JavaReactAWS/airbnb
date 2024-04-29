@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import com.revature.airbnb.DAOs.BookingDAO;
 import com.revature.airbnb.Models.Booking;
-import com.revature.airbnb.Exceptions.BookingNotFoundException;
+import com.revature.airbnb.Exceptions.*;
 
 @Service
 public class BookingService {
@@ -22,14 +22,13 @@ public class BookingService {
         return bookingDAO.findAll();
     }
     
-    public Booking createBooking(Booking booking) {
+    public Booking createBooking(Booking booking) throws InvalidAuthenticationException  {
         return bookingDAO.save(booking);
     }
 
-    public Booking updateBookingStatus(Booking booking, String status) {
+    public Booking updateBooking(Booking booking) throws BookingNotFoundException {
         bookingDAO.findById(booking.getBookingId())
             .orElseThrow(() -> new BookingNotFoundException("Booking not found with id: " + booking.getBookingId()));
-        booking.setStatus(status);
         bookingDAO.save(booking);
         return booking;
     }
