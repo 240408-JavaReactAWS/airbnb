@@ -44,13 +44,7 @@ public class BookingController {
             return new ResponseEntity<>(UNAUTHORIZED);
         }
         Booking newBooking;
-        //try {
-            newBooking = bs.createBooking(booking);
-        /* } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(FORBIDDEN);
-        }   catch (InvalidAuthenticationException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
-        }*/
+        newBooking = bs.createBooking(booking);
         return new ResponseEntity<>(newBooking, CREATED);
     }
 

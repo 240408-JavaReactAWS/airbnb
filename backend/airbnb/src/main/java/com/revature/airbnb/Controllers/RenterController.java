@@ -80,6 +80,7 @@ public class RenterController {
     @GetMapping("{id}")
     public ResponseEntity<Renter> viewAccountDetails(@RequestHeader(name = "renter", required = true) String username, HttpSession session, @PathVariable int id) {
         Renter renter = (Renter) session.getAttribute("renter");
+        // If user is not logged in
         if (renter == null) {
             return new ResponseEntity<>(UNAUTHORIZED);
         }
@@ -87,9 +88,11 @@ public class RenterController {
         try {
             foundRenter = rs.getRenterByUsernameAndId(renter.getUsername(), id);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(FORBIDDEN);
+            // user does not exist
+            return new ResponseEntity<>(NOT_FOUND);
         } catch (InvalidAuthenticationException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
+            // not your account
+            return new ResponseEntity<>(FORBIDDEN);
         }
         return new ResponseEntity<>(foundRenter, OK);
     }
@@ -105,9 +108,9 @@ public class RenterController {
         try {
             foundRenter = rs.getRenterByUsernameAndId(renter.getUsername(), id);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(FORBIDDEN);
+            return new ResponseEntity<>(NOT_FOUND);
         } catch (InvalidAuthenticationException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
+            return new ResponseEntity<>(FORBIDDEN);
         }
         List<Listing> listings = foundRenter.getBookings().stream().map((Booking booking) -> {
             return ls.getListingById(booking.getListingId());
