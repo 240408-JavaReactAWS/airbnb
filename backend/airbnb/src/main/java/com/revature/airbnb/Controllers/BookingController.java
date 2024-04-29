@@ -40,9 +40,9 @@ public class BookingController {
         try {
             newBooking = bs.createBooking(booking);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(FORBIDDEN);
+            return new ResponseEntity<>(NOT_FOUND);
         } catch (InvalidAuthenticationException e) {
-            return new ResponseEntity<>(BAD_REQUEST);
+            return new ResponseEntity<>(FORBIDDEN);
         }
         return new ResponseEntity<>(newBooking, CREATED);
     }
