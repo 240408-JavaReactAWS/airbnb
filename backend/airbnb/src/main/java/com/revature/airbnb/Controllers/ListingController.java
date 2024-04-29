@@ -36,13 +36,7 @@ public class ListingController {
             return new ResponseEntity<>(UNAUTHORIZED);
         }
         Listing newListing;
-        try {
-            newListing = ls.createListing(listing);
-        } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(NOT_FOUND);
-        } catch (InvalidAuthenticationException e) {
-            return new ResponseEntity<>(FORBIDDEN);
-        }
+        newListing = ls.createListing(listing);
         return new ResponseEntity<>(newListing, CREATED);
     }
   

@@ -118,6 +118,24 @@ public class RenterController {
         return new ResponseEntity<>(listings, OK);
     }
 
+    @GetMapping("{id}/bookings")
+    public ResponseEntity<List<Booking>> viewBookings(@PathVariable int id, HttpSession session) {
+        //Make sure the renter is logged in!
+        Renter renter = (Renter) session.getAttribute("renter");
+        if (renter == null) {
+            return new ResponseEntity<>(UNAUTHORIZED);
+        }
+        Renter foundRenter;
+        try {
+            foundRenter = rs.getRenterByUsernameAndId(renter.getUsername(), id);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(NOT_FOUND);
+        } catch (InvalidAuthenticationException e) {
+            return new ResponseEntity<>(FORBIDDEN);
+        }
+        return new ResponseEntity<>(foundRenter.getBookings(), OK);
+    }
+
     @ExceptionHandler(InvalidRegistrationException.class)
     @ResponseStatus(BAD_REQUEST)
     public @ResponseBody String handleInvalidRegistration(InvalidRegistrationException e) {
