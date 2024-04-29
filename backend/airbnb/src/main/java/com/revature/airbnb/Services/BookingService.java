@@ -30,6 +30,7 @@ public class BookingService {
      * If any of these fields are missing... 
      */
     public Booking createBooking(Booking booking)  {
+
         return bookingDAO.save(booking);
     }
 
@@ -37,9 +38,14 @@ public class BookingService {
      * If the Booking is not found, a BookingNotFoundException is thrown.
      */
     public Booking updateBooking(Booking booking) throws BookingNotFoundException {
+
         bookingDAO.findById(booking.getBookingId())
             .orElseThrow(() -> new BookingNotFoundException("Booking not found with id: " + booking.getBookingId()));
         bookingDAO.save(booking);
         return booking;
+    }
+
+    public List<Booking> findByOwnerId(int ownerId) {
+        return bookingDAO.findByOwnerId(ownerId);
     }
 }

@@ -16,18 +16,21 @@ import jakarta.servlet.http.HttpSession;
 public class BookingController {
 
     private final BookingService bs;
+    private final ListingService ls;
 
     @Autowired
-    public BookingController(BookingService bs) {
+    public BookingController(BookingService bs, ListingService ls) {
         this.bs = bs;
+        this.ls = ls;
     }
 
     /* GET /bookings */
     //QA: Should this endpoint be available for renters and owners?
+    /* 
     @GetMapping
     public ResponseEntity<List<Booking>> getAllBookings() {
         return new ResponseEntity<>(bs.getAllBookings(), OK);
-    }
+    }*/
 
     /* As an renter, create a Booking request for a specific listing */
     /* POST /bookings */
@@ -40,9 +43,23 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, HttpSession session)  {
         Renter renter = (Renter) session.getAttribute("renter");
+        //Make sure the renter exists!
         if (renter == null) {
             return new ResponseEntity<>(UNAUTHORIZED);
         }
+
+        //Make sure the renter is the renter of the booking!
+        if(renter.getUserId() != booking.getRenterId()) {
+            return new ResponseEntity<>(FORBIDDEN);
+        }
+
+        //Make sure the listing exists!
+        try{
+            Listing mightBeAListing = ls.getListingById(booking.getListingId());
+        } catch (ListingNotFoundException e) {
+            return new ResponseEntity<>(NOT_FOUND);
+        }
+
         Booking newBooking;
         newBooking = bs.createBooking(booking);
         return new ResponseEntity<>(newBooking, CREATED);
@@ -50,24 +67,37 @@ public class BookingController {
 
     /* As an owner, update a booking's status */
     /* PATCH /bookings/id */
-    // TODO: Implement this method
-    // @PatchMapping("/{bookingId}")
-    // public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking, HttpSession session, @PathVariable int bookingId) {
-    //     Owner owner = (Owner) session.getAttribute("owner");
-    //     if (owner == null) {
-    //         return new ResponseEntity<>(UNAUTHORIZED);
-    //     }
-    //     Booking updatedBooking;
-    //     try {
-    //         Booking foundBooking = bs.findById(bookingId);
-    //         foundBooking.setStatus(booking.getStatus());
-    //         updatedBooking = bs.updateBooking(
-    //         foundOwner = os.getOwnerByUsernameAndId(owner.getUsername(), booking.getid);
-    //     } catch (InvalidAuthenticationException e) {
-    //         return new ResponseEntity<>(BAD_REQUEST);
-    //     }
-    //     return new ResponseEntity<>(updatedBooking, OK);
-    // }
+     @PatchMapping("/{bookingId}")
+     public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking, HttpSession session, @PathVariable int bookingId) {
+        //Make sure the owner is logged in
+         Owner owner = (Owner) session.getAttribute("owner");
+         if (owner == null) {
+             return new ResponseEntity<>(UNAUTHORIZED);
+         }
+         Booking updatedBooking;
+         try {
+             Listing listing = ls.getListingById(booking.getListingId());
+             Booking foundBooking = null;
+             for(Booking b : listing.getBookings())
+             {
+                    if(b.getBookingId() == bookingId)
+                    {
+                        foundBooking = b;
+                        break;
+                    }
+             }
+            if(foundBooking == null)
+            {
+                return new ResponseEntity<>(NOT_FOUND);
+            }
+             foundBooking.setStatus(booking.getStatus());
+             updatedBooking = bs.updateBooking(foundBooking);
+         }
+            catch (BookingNotFoundException e) {
+             return new ResponseEntity<>(NOT_FOUND);
+            }
+         return new ResponseEntity<>(updatedBooking, OK);
+     }
  
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException e) {
