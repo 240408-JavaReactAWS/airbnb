@@ -187,6 +187,11 @@ Request headers:
 Request body:
 ```
 {
+    "bookingId": 1,
+    "renterId": 1,
+    "listingId": 1,
+    "startDate": "04/25/24",
+    "endDate": "05/1/24",
     "status": "accepted"
 }
 ```
