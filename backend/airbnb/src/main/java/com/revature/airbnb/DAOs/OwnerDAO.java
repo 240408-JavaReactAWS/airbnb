@@ -12,5 +12,4 @@ public interface OwnerDAO extends JpaRepository<Owner, Integer>{
 
     Optional<Owner> findOwnerByUsername(String username);
     Optional<Owner> findByUsernameAndPassword(String username, String password);
-    Optional<Owner> findByToken(String token);
 }

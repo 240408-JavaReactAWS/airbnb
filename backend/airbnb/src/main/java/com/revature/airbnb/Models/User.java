@@ -1,12 +1,11 @@
 package com.revature.airbnb.Models;
 
-import java.util.Random;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Transient;
 
 @MappedSuperclass
 public class User {
@@ -17,11 +16,12 @@ public class User {
 
     @Column(unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false, unique = true)
     private String email;
-    @Column(unique = true)
-    private String token;
     //Let's figure out how to hide this later
+    @Transient
     private final String tokenChars = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     public User() {}
@@ -54,24 +54,5 @@ public class User {
     }
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getToken() {
-        return this.token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public void generateToken()
-    {
-        String toRet = "";
-        Random random = new Random();
-        for(int i = 0; i < 10; i++)
-        {
-            toRet += tokenChars.charAt(random.nextInt(tokenChars.length()));
-        }
-        this.token = toRet;
     }
 }

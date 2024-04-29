@@ -21,6 +21,8 @@ import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Services.ListingService;
 import com.revature.airbnb.Services.OwnerService;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,12 +33,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ListingController {
 
     private final ListingService listingService;
-    private final OwnerService ownerService;
 
     @Autowired
-    public ListingController(ListingService listingService, OwnerService ownerService) {
+    public ListingController(ListingService listingService) {
         this.listingService = listingService;
-        this.ownerService = ownerService;
     }
 
     /* This function retrieves all listings from the Listings table */
@@ -48,8 +48,13 @@ public class ListingController {
 
     /* This function adds an entry in the Listings table, using a token from an Owner to determine its creator */
     @PostMapping
-    public ResponseEntity<Listing> createListing(@RequestBody Listing listing, @RequestParam String token)  {
-        Owner owner = ownerService.getOwnerByToken(token);
+    public ResponseEntity<Listing> createListing(@RequestBody Listing listing, HttpSession session)  {
+        Owner owner = (Owner) session.getAttribute("user");
+
+        if(owner == null)
+        {
+            throw new InvalidAuthenticationException("You must be logged in to create a listing");
+        }
         listing.setOwnerId(owner.getUserId());
         return new ResponseEntity<>(listingService.createListing(listing), HttpStatus.CREATED);
     }

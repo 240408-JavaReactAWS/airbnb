@@ -48,25 +48,12 @@ public class OwnerService {
 
     public Owner login(String username, String password) throws InvalidAuthenticationException
     {
-        Owner toRet = ownerDAO.findByUsernameAndPassword(username, password).orElseThrow(() -> new InvalidAuthenticationException(
-            "That username/password combination is not present in the database."));
-
-        toRet.generateToken();
-        //toRet.setToken(username);
-        ownerDAO.save(toRet);
-        return toRet;
+        Owner owner = ownerDAO.findOwnerByUsername(username).orElseThrow(() 
+            -> new InvalidAuthenticationException("Could not find user with username: " + username));
+        
+        if (!owner.getPassword().equals(password)) {
+            throw new InvalidAuthenticationException("Invalid password for user: " + username);
+        }
+        return owner;
     }
-
-    public Owner logout(String token) throws InvalidAuthenticationException
-    {
-        Owner toRet = ownerDAO.findByToken(token).orElseThrow(()-> new InvalidAuthenticationException("Could not find user for corresponding token."));
-        toRet.setToken(null);
-        ownerDAO.save(toRet);
-        return toRet;
-    }
-
-    public Owner getOwnerByToken(String token) {
-        return ownerDAO.findByToken(token).orElseThrow(() -> new UserNotFoundException("User not found with token: " + token));
-    }
-
 }

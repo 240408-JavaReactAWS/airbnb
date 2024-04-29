@@ -29,6 +29,9 @@ import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Models.Renter;
 import com.revature.airbnb.Services.BookingService;
 import com.revature.airbnb.Services.RenterService;
+
+import jakarta.servlet.http.HttpSession;
+
 import com.revature.airbnb.Services.OwnerService;
 
 @RestController
@@ -55,9 +58,9 @@ public class BookingController {
     /*This function adds an entry in the Bookings table, using a token from a User to determine its creator */
     /* TODO: Controllers should handle exceptions, not throw them */
     @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, @RequestParam String token) {
+    public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, HttpSession session) {
         try {
-            Renter loggedInRenter = renterService.getRenterByToken(token);
+            Renter loggedInRenter = (Renter)session.getAttribute("user");
             if (loggedInRenter != null) {
                 booking.setRenterId(loggedInRenter.getUserId());
                 Booking newBooking = bookingService.createBooking(booking);

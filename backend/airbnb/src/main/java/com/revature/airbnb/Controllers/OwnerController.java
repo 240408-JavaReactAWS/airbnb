@@ -19,10 +19,12 @@ import com.revature.airbnb.Services.BookingService;
 import com.revature.airbnb.Services.ListingService;
 import com.revature.airbnb.Services.OwnerService;
 
+import jakarta.servlet.http.HttpSession;
+
 import static org.springframework.http.HttpStatus.*;
 import org.springframework.http.HttpStatus;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/owners")
 public class OwnerController {
@@ -40,29 +42,42 @@ public class OwnerController {
 
     /*This function registers an Owner by adding their username, password, and email to the Owners table */
     @PostMapping("/register")
-    public ResponseEntity<Owner> registerOwner(@RequestBody Owner owner) {
+    public ResponseEntity<Owner> registerOwner(@RequestBody Owner owner, HttpSession session) {
         Owner savedOwner;
 
         try {
             savedOwner = ownerService.registerOwner(owner.getUsername(), owner.getPassword(), owner.getEmail());
+            session.setAttribute("user", savedOwner);
         } catch (UsernameAlreadyTakenException e) {
-            return new ResponseEntity<>(BAD_REQUEST); // returning 500 internal error when supposed to return 400 bad request
+            return new ResponseEntity<>(BAD_REQUEST);
         }
         return new ResponseEntity<>(savedOwner, CREATED);
     }
 
     /*This function logs in an Owner by adding their token to the Owners table */
     @PostMapping("/login")
-    public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner)
+    public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner, HttpSession session)
     {
-        return ResponseEntity.ok(ownerService.login(owner.getUsername(), owner.getPassword()));
+        Owner loggedInOwner;
+        try
+        {
+            loggedInOwner = ownerService.login(owner.getUsername(), owner.getPassword());
+            session.setAttribute("user", loggedInOwner);
+        }
+        catch (InvalidAuthenticationException | UserNotFoundException e)
+        {
+            return new ResponseEntity<>(BAD_REQUEST);
+        }
+        return new ResponseEntity<>(loggedInOwner, OK);
     }
 
     /*This function logs out an Owner by removing their token from the Owners table */
     @PostMapping("/logout")
-    public ResponseEntity<Owner> logoutHandler(@RequestBody String token)
+    public ResponseEntity<Owner> logoutHandler(HttpSession session)
     {
-        return ResponseEntity.ok(ownerService.logout(token));
+        session.removeAttribute("user");
+        session.invalidate();
+        return new ResponseEntity<>(OK);
     }
 
     /*This function retrieves all Owners from the Owners table */
@@ -97,7 +112,7 @@ public class OwnerController {
         Owner owner = ownerService.getOwnerById(id);
         return listingService.createListing(listing);
     }
-  
+    
     /* This function retrieves all listings for a particular Owner, using the Owner's ID */
     @GetMapping("{id}/listings")
     public List<Listing> getAllOwners(@PathVariable int id) {

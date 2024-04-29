@@ -10,6 +10,7 @@ import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import org.springframework.stereotype.Service;
 
 import com.revature.airbnb.DAOs.RenterDAO;
+import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Models.Renter;
 
 @Service
@@ -38,31 +39,18 @@ public class RenterService {
         return renterDAO.findById(id).orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
     }
 
-    public Renter getRenterByToken(String token) throws UserNotFoundException {
-        return renterDAO.findByToken(token).orElseThrow(() -> new UserNotFoundException("User not found with token: " + token));
-    }
-
-
     public List<Renter> getAllRenters() {
         return renterDAO.findAll();
     }
 
     public Renter login(String username, String password) throws InvalidAuthenticationException
-    {
-        Renter toRet = renterDAO.findByUsernameAndPassword(username, password).orElseThrow(() -> new InvalidAuthenticationException(
-            "That username/password combination is not present in the database."));
-
-        toRet.generateToken();
-        //toRet.setToken(username);
-        renterDAO.save(toRet);
-        return toRet;
-    }
-
-    public Renter logout(String token) throws InvalidAuthenticationException
-    {
-        Renter toRet = renterDAO.findByToken(token).orElseThrow(()-> new InvalidAuthenticationException("Could not find user for corresponding token."));
-        toRet.setToken(null);
-        renterDAO.save(toRet);
-        return toRet;
+     {
+        Renter renter = renterDAO.findRenterByUsername(username).orElseThrow(() 
+            -> new InvalidAuthenticationException("Could not find user with username: " + username));
+        
+        if (!renter.getPassword().equals(password)) {
+            throw new InvalidAuthenticationException("Invalid password for user: " + username);
+        }
+        return renter;
     }
 }

@@ -11,13 +11,17 @@ import com.revature.airbnb.Exceptions.InvalidRegistrationException;
 import com.revature.airbnb.Exceptions.UserNotFoundException;
 import com.revature.airbnb.Exceptions.UsernameAlreadyTakenException;
 import com.revature.airbnb.Models.Booking;
+import com.revature.airbnb.Models.Owner;
 import com.revature.airbnb.Models.Renter;
 import com.revature.airbnb.Services.BookingService;
 import com.revature.airbnb.Services.RenterService;
+
+import jakarta.servlet.http.HttpSession;
+
 import static org.springframework.http.HttpStatus.*;
 import org.springframework.http.HttpStatus;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/renters")
 public class RenterController {
@@ -33,11 +37,12 @@ public class RenterController {
 
     /*This function registers a Renter by adding their username, password, and email to the Renters table */
     @PostMapping("/register")
-    public ResponseEntity<Renter> registerRenter(@RequestBody Renter renter) {
+    public ResponseEntity<Renter> registerRenter(@RequestBody Renter renter, HttpSession session) {
         Renter savedRenter;
 
         try {
             savedRenter = renterService.registerRenter(renter.getUsername(), renter.getPassword(), renter.getEmail());
+            session.setAttribute("user", savedRenter);
         } catch (UsernameAlreadyTakenException e) {
             return new ResponseEntity<>(BAD_REQUEST);
         }
@@ -46,17 +51,28 @@ public class RenterController {
 
     /*This function logs in a Renter by adding their token to the Renters table */
     @PostMapping("/login")
-    public ResponseEntity<Renter> loginHandler(@RequestBody Renter owner)
+    public ResponseEntity<Renter> loginHandler(@RequestBody Renter renter, HttpSession session)
     {
-        return ResponseEntity.ok(renterService.login(owner.getUsername(), owner.getPassword()));
+        Renter loggedInRenter;
+        try
+        {
+            loggedInRenter = renterService.login(renter.getUsername(), renter.getPassword());
+            session.setAttribute("user", loggedInRenter);
+        }
+        catch (InvalidAuthenticationException | UserNotFoundException e)
+        {
+            return new ResponseEntity<>(BAD_REQUEST);
+        }
+        return new ResponseEntity<>(loggedInRenter, OK);
     }
 
     /*This function logs out a Renter by removing their token from the Renters table */
     @PostMapping("/logout")
-    public ResponseEntity<Renter> logoutHandler(@RequestBody String token)
+    public ResponseEntity<Renter> logoutHandler(HttpSession session)
     {
-        System.out.println(token);
-        return ResponseEntity.ok(renterService.logout(token));
+        session.removeAttribute("user");
+        session.invalidate();
+        return new ResponseEntity<>(OK);
     }
 
     /*This function retrieves all renters from the Renters table */
