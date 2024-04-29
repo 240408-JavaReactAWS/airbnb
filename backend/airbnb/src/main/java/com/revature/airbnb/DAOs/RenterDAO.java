@@ -12,5 +12,5 @@ public interface RenterDAO extends JpaRepository<Renter, Integer>{
 
     Optional<Renter> findRenterByUsername(String username);
     Optional<Renter> findByUsernameAndPassword(String username, String password);
-    Optional<Renter> findByToken(String token);
+    // Optional<Renter> findByToken(String token);
 }

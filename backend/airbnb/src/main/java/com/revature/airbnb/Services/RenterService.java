@@ -63,11 +63,4 @@ public class RenterService {
             throw new InvalidAuthenticationException("Username or password was incorrect!");
         }
     }
-
-    public Renter logout(String token) throws InvalidAuthenticationException {
-        Renter toRet = renterDAO.findByToken(token).orElseThrow(()-> new InvalidAuthenticationException("Could not find user for corresponding token."));
-        toRet.setToken(null);
-        renterDAO.save(toRet);
-        return toRet;
-    }
 }
