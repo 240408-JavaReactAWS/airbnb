@@ -48,7 +48,13 @@ public class ListingController {
   
     @ExceptionHandler(InvalidAuthenticationException.class)
     @ResponseStatus(BAD_REQUEST)
-    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e) {
+    public @ResponseBody String invalidAuthenticationHandler(InvalidAuthenticationException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(ListingNotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public @ResponseBody String listingNotFoundHandler(ListingNotFoundException e) {
         return e.getMessage();
     }
 }
