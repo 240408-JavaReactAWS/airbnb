@@ -1,7 +1,7 @@
 package com.revature.airbnb.Exceptions;
 
-public class InvalidAuthenticationException extends RuntimeException {
-    public InvalidAuthenticationException(String e) {
-        super(e);
+public class InvalidAuthenticationException extends Exception {
+    public InvalidAuthenticationException(String msg) {
+        super(msg);
     }
 }
