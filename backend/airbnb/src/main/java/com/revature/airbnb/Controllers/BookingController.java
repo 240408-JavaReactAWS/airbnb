@@ -23,6 +23,7 @@ public class BookingController {
     }
 
     /* GET /bookings */
+    //QA: Should this endpoint be available for renters and owners?
     @GetMapping
     public ResponseEntity<List<Booking>> getAllBookings() {
         return new ResponseEntity<>(bs.getAllBookings(), OK);
@@ -30,6 +31,12 @@ public class BookingController {
 
     /* As an renter, create a Booking request for a specific listing */
     /* POST /bookings */
+
+    /*
+     * This method will allow a renter to create a booking.
+     * The renter must be logged in to create a booking. If they are not, they will receive a 401 Unauthorized response.
+     * If the renter is logged in, the booking will be created and returned with a 201 Created response.
+     */
     @PostMapping
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, HttpSession session)  {
         Renter renter = (Renter) session.getAttribute("renter");
@@ -37,13 +44,13 @@ public class BookingController {
             return new ResponseEntity<>(UNAUTHORIZED);
         }
         Booking newBooking;
-        try {
+        //try {
             newBooking = bs.createBooking(booking);
-        } catch (UserNotFoundException e) {
+        /* } catch (UserNotFoundException e) {
             return new ResponseEntity<>(FORBIDDEN);
-        } catch (InvalidAuthenticationException e) {
+        }   catch (InvalidAuthenticationException e) {
             return new ResponseEntity<>(BAD_REQUEST);
-        }
+        }*/
         return new ResponseEntity<>(newBooking, CREATED);
     }
 
@@ -76,11 +83,5 @@ public class BookingController {
     @ExceptionHandler(BookingNotFoundException.class)
     public ResponseEntity<String> handleBookingNotFoundException(BookingNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), NOT_FOUND);
-    }
-
-    @ExceptionHandler(BookingNotFoundException.class)
-    @ResponseStatus(BAD_REQUEST)
-    public @ResponseBody String BookingNotFoundHandler(BookingNotFoundException e) {
-        return e.getMessage();
-    }   
+    }  
 }

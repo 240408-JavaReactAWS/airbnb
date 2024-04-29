@@ -36,19 +36,25 @@ public class ListingController {
             return new ResponseEntity<>(UNAUTHORIZED);
         }
         Listing newListing;
-        try {
+        //try {
             newListing = ls.createListing(listing);
-        } catch (UserNotFoundException e) {
+        /*} catch (UserNotFoundException e) {
             return new ResponseEntity<>(FORBIDDEN);
         } catch (InvalidAuthenticationException e) {
             return new ResponseEntity<>(BAD_REQUEST);
-        }
+        }*/
         return new ResponseEntity<>(newListing, CREATED);
     }
   
     @ExceptionHandler(InvalidAuthenticationException.class)
     @ResponseStatus(BAD_REQUEST)
-    public @ResponseBody String InvalidAuthenticationHandler(InvalidAuthenticationException e) {
+    public @ResponseBody String invalidAuthenticationHandler(InvalidAuthenticationException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(ListingNotFoundException.class)
+    @ResponseStatus(NOT_FOUND)
+    public @ResponseBody String listingNotFoundHandler(ListingNotFoundException e) {
         return e.getMessage();
     }
 }
