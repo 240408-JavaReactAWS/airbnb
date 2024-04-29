@@ -31,12 +31,12 @@ public class ListingService {
         return listingDAO.findById(id).orElseThrow(() -> new RuntimeException("Listing not found with id: " + id));
     }
 
-    public List<Listing> getListingsByOwner(Owner owner) {
-        Optional<Owner> foundOwner = ownerDAO.findById(owner.getUserId());
-        if (foundOwner.isPresent()) {
-            return foundOwner.get().getListings();
-        } else {
-            throw new InvalidAuthenticationException("Owner not found with id: " + owner.getUserId());
-        }
-    } 
+    // public List<Listing> getListingsByOwner(Owner owner) {
+    //     Optional<Owner> foundOwner = ownerDAO.findById(owner.getUserId());
+    //     if (foundOwner.isPresent()) {
+    //         return foundOwner.get().getListings();
+    //     } else {
+    //         throw new InvalidAuthenticationException("Owner not found with id: " + owner.getUserId());
+    //     }
+    // } 
 }

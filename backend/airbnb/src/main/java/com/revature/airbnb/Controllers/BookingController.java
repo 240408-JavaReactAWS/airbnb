@@ -46,12 +46,12 @@ public class BookingController {
 
     /*This function adds an entry in the Bookings table, using a token from a User to determine its creator */
     /* TODO: Controllers should handle exceptions, not throw them */
-    @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, @RequestParam String token) {
-        Renter renter = renterService.getRenterByToken(token);
-        booking.setRenterId(renter.getUserId());
-        return new ResponseEntity<>(bookingService.createBooking(booking), HttpStatus.CREATED);
-    }
+    // @PostMapping
+    // public ResponseEntity<Booking> createBooking(@RequestBody Booking booking, @RequestParam String token) {
+    //     Renter renter = renterService.getRenterByToken(token);
+    //     booking.setRenterId(renter.getUserId());
+    //     return new ResponseEntity<>(bookingService.createBooking(booking), HttpStatus.CREATED);
+    // }
 
     /* As an owner, update a booking's status */
     @PatchMapping("/{bookingId}")

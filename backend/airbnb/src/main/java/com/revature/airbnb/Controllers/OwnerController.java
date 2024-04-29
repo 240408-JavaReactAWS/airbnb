@@ -51,16 +51,16 @@ public class OwnerController {
     }
 
     /*This function logs in an Owner by adding their token to the Owners table */
-    @PostMapping("/login")
-    public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner) {
-        return ResponseEntity.ok(ownerService.login(owner.getUsername(), owner.getPassword()));
-    }
+    // @PostMapping("/login")
+    // public ResponseEntity<Owner> loginHandler(@RequestBody Owner owner) {
+    //     return ResponseEntity.ok(ownerService.login(owner.getUsername(), owner.getPassword()));
+    // }
 
     /*This function logs out an Owner by removing their token from the Owners table */
-    @PostMapping("/logout")
-    public ResponseEntity<Owner> logoutHandler(@RequestBody String token) {
-        return ResponseEntity.ok(ownerService.logout(token));
-    }
+    // @PostMapping("/logout")
+    // public ResponseEntity<Owner> logoutHandler(@RequestBody String token) {
+    //     return ResponseEntity.ok(ownerService.logout(token));
+    // }
 
     /*This function retrieves all Owners from the Owners table */
     @GetMapping
