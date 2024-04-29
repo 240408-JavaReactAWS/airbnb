@@ -30,9 +30,10 @@ public class DataLoaderService implements CommandLineRunner {
         } catch (Exception e) {
             throw new RuntimeException("Failed to load seed data", e);
         }
-        // JsonNode listings = getListings(jsonNode);
+        JsonNode listings = getListings(jsonNode);
     }
-    // private JsonNode getListings(JsonNode jsonNode) {
-    //     return jsonNode.get("listings");
-    // }
+    
+    private JsonNode getListings(JsonNode jsonNode) {
+        return jsonNode.get("listings");
+    }
 }
