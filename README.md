@@ -50,7 +50,7 @@ status
 
 # User Stories
 
-As a user (renter/owner), I should be able to view all listings.
+### As a user (renter/owner), I should be able to view all listings.
 
 GET /listings
 
