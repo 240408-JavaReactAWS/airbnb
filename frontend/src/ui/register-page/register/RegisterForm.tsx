@@ -1,15 +1,14 @@
 import { useState } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 function RegisterForm() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showError, setShowError] = useState(false);
 
-    // owne
     const handleSubmit = async (event: any) => {
         event.preventDefault()
         // user is a renter
@@ -31,6 +30,7 @@ function RegisterForm() {
             });
 
             // Handle successful login
+            console.log("Register successful");
             console.log(res);
             if (res.status === 201) {
                 // TODO: redirect user somewhere

@@ -17,7 +17,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/register' element={<RegisterPage />} />
           <Route path='/login' element={<LoginPage />} />
-          <Route path='/logout/:id' element={<LogoutPage />} />
+          <Route path='/logout' element={<LogoutPage />} />
           <Route path='/owners' element={<OwnersPage />} />
           <Route path='/renters' element={<RentersPage />} />
           <Route path='*' element={<h1>404 Not Found</h1>}></Route>

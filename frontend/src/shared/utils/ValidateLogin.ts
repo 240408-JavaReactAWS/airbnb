@@ -14,7 +14,7 @@ export const validateLogin = {
             let res = await axios.get(`http://localhost:8080/${role}s/session`, {
                 withCredentials: true
             });
-            console.log(res);
+            
             if (res.status === 200) {
                 console.log("Session is valid");
                 return true;

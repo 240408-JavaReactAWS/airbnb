@@ -8,21 +8,11 @@ function LoginForm() {
     const [password, setPassword] = useState('')
     const [showError, setShowError] = useState(false);
 
-    // "http://localhost:8080/renters/login"
-    // username, password
-    // 200
-
-    // "http://localhost:8080/owners/login"
-    // username, password
-    // 200
-
     // returned obj has listings property -> Owner
     const handleLogin = async (event: any) => {
         event.preventDefault()
-        console.log(event)
-        // TODO: validate no one logged in
-        // user is a renter
         let uri
+        // user is a renter
         if (event.target[2].checked) {
             uri = "http://localhost:8080/renters/login"
         // user is an owner
@@ -37,15 +27,11 @@ function LoginForm() {
                 withCredentials: true
             });
             // Handle successful login
-            
-            console.log(res);
             if (res.status === 200) {
-                // TODO: handle successful login
-                // redirect user?
+                localStorage.setItem("user", res.data)
                 // user is a renter
                 if (uri === "http://localhost:8080/renters/login") {
                     localStorage.setItem("role", "renter")
-                    console.log('Login successful!')
                 // user is an owner
                 } else {
                     localStorage.setItem("role", "owner")

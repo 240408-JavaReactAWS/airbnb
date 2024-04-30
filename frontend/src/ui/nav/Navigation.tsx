@@ -6,14 +6,15 @@ import { validateLogin } from '../../shared/utils/ValidateLogin';
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const loggedInUser = localStorage.getItem("user");
 
   useEffect(() => {
       let asyncCall = async () => {
           let validateSession = await validateLogin.validateSession();
           if (validateSession) {
-              setIsLoggedIn(true);
+            setIsLoggedIn(true);
           } else{
-              setIsLoggedIn(false);
+            setIsLoggedIn(false);
           }
       }
       asyncCall();
