@@ -9,13 +9,14 @@ function RegisterForm() {
     const [password, setPassword] = useState('')
     const [showError, setShowError] = useState(false);
 
+    // owne
     const handleSubmit = async (event: any) => {
         event.preventDefault()
-        console.log(event.target[3].checked)
         // user is a renter
         let uri
         if (event.target[3].checked) {
             uri = "http://localhost:8080/renters/register"
+        // user is an owner
         } else {
             uri = "http://localhost:8080/owners/register"
         }
@@ -28,9 +29,11 @@ function RegisterForm() {
             }, {
                 withCredentials: true
             });
+
             // Handle successful login
             console.log(res);
             if (res.status === 201) {
+                // TODO: redirect user somewhere
                 // navigate('/plans');
             }
 
@@ -41,7 +44,6 @@ function RegisterForm() {
         setPassword('')
         setUsername('')
         setShowError(false)
-        // TODO: redirect user somewhere
     }
 
     return (
