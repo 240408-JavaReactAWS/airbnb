@@ -1,4 +1,5 @@
 import IOwner from '../../shared/interfaces/owner';
+import './Owner.css';
 
 interface IOwnerProps {
     owner: IOwner,
@@ -6,8 +7,8 @@ interface IOwnerProps {
 }
 
 function Owner(props: IOwnerProps) {
-  return (
-    <div key={props.owner.userId}>
+    return (
+    <div className="owner" key={props.owner.userId}>
         <h2>{props.owner.username}</h2>
         <p>{props.owner.email}</p>
         {props.owner.listings.map((listing) => (
@@ -17,17 +18,17 @@ function Owner(props: IOwnerProps) {
                 <p>City: {listing.city}</p>
                 <p>State: {listing.state}</p>
                 <p>Description: {listing.description}</p>
-                <p>Bookings: {listing.bookings?.map((booking) =>(
+                {listing.bookings.length > 0 && <p>Bookings: {listing.bookings?.map((booking) =>(
                     <div key={booking.bookingId}>
                         <p>Start Date: {booking.startDate}</p>
                         <p>End Date: {booking.endDate}</p>
                     </div>
-                ))}</p>
-                <p>Photos: {listing.photos}</p>
+                ))}</p>}
+                {listing.photos.length > 0 && <p>Photos: {listing.photos}</p>}
             </div>
         ))}
     </div>
-  );
+    );
 }
 
 export default Owner;
