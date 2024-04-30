@@ -1,12 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import './Navigation.css'
 import { useEffect, useState } from 'react';
 import { validateLogin } from '../../shared/utils/ValidateLogin';
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
-  const loggedInUser = localStorage.getItem("user");
 
   useEffect(() => {
       let asyncCall = async () => {
