@@ -1,9 +1,9 @@
-import IListing from '../../shared/interfaces/listing';
+import IListing from '../../../shared/interfaces/listing';
 import './Listing.css';
+import ListingsPhotos from './photos/ListingPhotos';
 
 interface IListingProps {
-    listing: IListing,
-    key: number
+  listing: IListing
 }
 
 function Listing(props: IListingProps) {
@@ -12,11 +12,7 @@ function Listing(props: IListingProps) {
       <h2>{props.listing.name}</h2>
       <h3>{props.listing.address}</h3>
       <p>{props.listing.description}</p>
-      <div className="listing-photos">
-        {props.listing.photos.length > 0 && props.listing.photos.map((photo) => (
-          <img src={photo} alt={props.listing.name} />
-        ))}
-      </div>
+      <ListingsPhotos listingId={props.listing.listingId} photos={props.listing.photos} alt={props.listing.name} />
     </div>
   );
 }

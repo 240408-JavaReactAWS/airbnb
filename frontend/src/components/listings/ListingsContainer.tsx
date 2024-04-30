@@ -1,6 +1,6 @@
 import useFetch from '../../data/useFetch';
 import IListing from '../../shared/interfaces/listing';
-import Listing from './Listing';
+import Listing from './listing/Listing';
 import './ListingsContainer.css';
 
 function ListingsContainer() {
