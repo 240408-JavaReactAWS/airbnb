@@ -1,4 +1,4 @@
-import LogoutButton from "../LogoutButton"
+import LogoutButton from "./LogoutButton"
 import { useParams } from "react-router-dom";
 
 function LogoutPage() {
