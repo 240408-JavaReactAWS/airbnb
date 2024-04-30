@@ -6,7 +6,7 @@ export default interface IListing {
     city: string;
     state: string;
     description: string;
-    photos: String[];
+    photos: Array<String>;
     name: string;
     bookings: IBooking[];
 }
