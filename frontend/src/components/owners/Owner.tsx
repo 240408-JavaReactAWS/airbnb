@@ -10,7 +10,7 @@ function Owner(props: IOwnerProps) {
     <div key={props.owner.userId}>
         <h2>{props.owner.username}</h2>
         <p>{props.owner.email}</p>
-        <p>{props.owner.listings.map((listing) => (
+        {props.owner.listings.map((listing) => (
             <div key={listing.listingId}>
                 <h4>Name: {listing.name}</h4>
                 <p>Address: {listing.address}</p>
@@ -25,7 +25,7 @@ function Owner(props: IOwnerProps) {
                 ))}</p>
                 <p>Photos: {listing.photos}</p>
             </div>
-        ))}</p>
+        ))}
     </div>
   );
 }
