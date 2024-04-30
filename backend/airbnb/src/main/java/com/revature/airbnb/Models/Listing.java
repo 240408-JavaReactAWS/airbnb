@@ -30,11 +30,10 @@ public class Listing {
     private String city;
     private String state;
     private String description;
-    private String[] photos;
+    private List<String> photos;
     private String name;
     
-    public Listing(String address, String city, String state, String description,
-        String[] photos, String name, int ownerId) {
+    public Listing(String address, String city, String state, String description, List<String> photos, String name, int ownerId) {
         this.address = address;
         this.city = city;
         this.state = state;
