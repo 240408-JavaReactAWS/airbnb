@@ -26,9 +26,10 @@ function LoginForm() {
             }, {
                 withCredentials: true
             });
+            console.log(res);
             // Handle successful login
             if (res.status === 200) {
-                localStorage.setItem("user", res.data)
+                localStorage.setItem("user", JSON.stringify(res.data))
                 // user is a renter
                 if (uri === "http://localhost:8080/renters/login") {
                     localStorage.setItem("role", "renter")
