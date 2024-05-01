@@ -7,6 +7,7 @@ import Home from './ui/home-page/index';
 import LoginPage from './ui/login-page';
 import RegisterPage from './ui/register-page';
 import LogoutPage from './ui/logout-page';
+import OwnerListings from './components/owners/OwnerListings';
 
 
 
@@ -17,8 +18,15 @@ function App() {
         <Navigation />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/register' element={<RegisterPage />} />
-          <Route path='/login' element={<LoginPage />} />
+          
+          {/* create mylistings if logged in user is an owner */}
+          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") == "owner") && <Route path="/mylistings" element={<OwnerListings />} />}
+          
+          {/* show register if no user logged in */}
+          {!localStorage.hasOwnProperty("user") && <Route path='/register' element={<RegisterPage />} />}
+
+          {/* create login path when no user logged in */}
+          {!localStorage.hasOwnProperty("user") && <Route path='/login' element={<LoginPage />} />}
 
           {/* create logout path if user is logged in */}
           {localStorage.hasOwnProperty("user") && <Route path='/logout' element={<LogoutPage />} />}

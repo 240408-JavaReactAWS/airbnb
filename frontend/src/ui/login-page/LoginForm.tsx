@@ -36,7 +36,8 @@ function LoginForm() {
                 } else {
                     localStorage.setItem("role", "owner")
                 }
-
+                console.log("Logged in")
+                navigate('/')
             }
 
         } catch (error) {
