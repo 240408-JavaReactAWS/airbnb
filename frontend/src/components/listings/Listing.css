@@ -1,0 +1,8 @@
+div.listing {
+    border: black 1px solid;
+}
+
+div.listing-photos {
+    width: 400px;
+    border: black 1px solid;
+}

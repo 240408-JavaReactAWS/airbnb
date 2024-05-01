@@ -8,6 +8,7 @@ import LoginPage from './ui/login-page';
 import RegisterPage from './ui/register-page';
 import LogoutPage from './ui/logout-page';
 import OwnerListings from './ui/owners-page/OwnerListings';
+import RenterRequestedListings from './ui/renters-page/RenterRequestedListings';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
 
           {/* create mylistings if logged in user is an owner */}
           {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") == "owner") && <Route path="/mylistings" element={<OwnerListings />} />}
+
+          {/* create mylistings if logged in user is an owner */}
+          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") == "renter") && <Route path="/my-requested-listings" element={<RenterRequestedListings />} />}
           
           {/* show register if no user logged in */}
           {!localStorage.hasOwnProperty("user") && <Route path='/register' element={<RegisterPage />} />}
