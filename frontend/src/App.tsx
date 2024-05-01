@@ -7,9 +7,7 @@ import Home from './ui/home-page/index';
 import LoginPage from './ui/login-page';
 import RegisterPage from './ui/register-page';
 import LogoutPage from './ui/logout-page';
-import OwnerListings from './components/owners/OwnerListings';
-
-
+import OwnerListings from './ui/owners-page/OwnerListings';
 
 function App() {
   return (
@@ -18,7 +16,7 @@ function App() {
         <Navigation />
         <Routes>
           <Route path='/' element={<Home />} />
-          
+
           {/* create mylistings if logged in user is an owner */}
           {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") == "owner") && <Route path="/mylistings" element={<OwnerListings />} />}
           

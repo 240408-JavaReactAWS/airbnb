@@ -1,15 +1,11 @@
-import IOwner from '../../shared/interfaces/owner';
-
-// interface IOwnerProps {
-//     owner: IOwner
-// }
+import { useState } from 'react';
+import NewListingForm from './NewListingForm';
 
 function OwnerListings() {
-    const owner = localStorage.getItem("user");
-    console.log(owner)
     return (
     <div className="owner">
         <h2>Owner Listings</h2>
+        <NewListingForm />
         {/* <h2>{props.owner.username}</h2>
         <p>{props.owner.email}</p>
         {props.owner.listings.map((listing) => (
