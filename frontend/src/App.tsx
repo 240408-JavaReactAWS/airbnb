@@ -19,7 +19,7 @@ function App() {
           <Route path='/' element={<Home />} />
 
           {/* create mylistings if logged in user is an owner */}
-          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "owner") && <Route path="/mylistings" element={<OwnerListings />} />}
+          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "owner") && <Route path="/listings" element={<OwnerListings />} />}
 
           {/* create mylistings if logged in user is an owner */}
           {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "renter") && <Route path="/listings" element={<RenterRequestedListings />} />}

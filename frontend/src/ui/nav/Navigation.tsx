@@ -24,7 +24,7 @@ function Navigation() {
           <li><Link to="/">Home</Link></li>
 
           {/* show mylistings if logged in user is an owner */}
-          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "owner") && <li><Link to="/mylistings" >My Listings</Link></li>}
+          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "owner") && <li><Link to="/listings" >My Listings</Link></li>}
 
           {/* show my-requested-listings if logged in user is a renter */}
           {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "renter") && <li><Link to="/listings" >My Requests</Link></li>}
