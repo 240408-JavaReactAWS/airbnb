@@ -19,10 +19,10 @@ function App() {
           <Route path='/' element={<Home />} />
 
           {/* create mylistings if logged in user is an owner */}
-            {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "owner") && <Route path="/mylistings" element={<OwnerListings />} />}
+          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "owner") && <Route path="/mylistings" element={<OwnerListings />} />}
 
           {/* create mylistings if logged in user is an owner */}
-          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "renter") && <Route path="/my-requested-listings" element={<RenterRequestedListings />} />}
+          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "renter") && <Route path="/listings" element={<RenterRequestedListings />} />}
           
           {/* show register if no user logged in */}
           {!localStorage.hasOwnProperty("user") && <Route path='/register' element={<RegisterPage />} />}
@@ -33,8 +33,6 @@ function App() {
           {/* create logout path if user is logged in */}
           {localStorage.hasOwnProperty("user") && <Route path='/logout' element={<LogoutPage />} />}
 
-          <Route path='/owners' element={<OwnersPage />} />
-          <Route path='/renters' element={<RentersPage />} />
           <Route path='*' element={<h1>404 Not Found</h1>}></Route>
         </Routes>
       </BrowserRouter>
