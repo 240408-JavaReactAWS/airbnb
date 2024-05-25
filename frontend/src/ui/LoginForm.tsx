@@ -1,9 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
-    const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [showError, setShowError] = useState(false);
@@ -38,7 +36,6 @@ function LoginForm() {
                     localStorage.setItem("role", "owner")
                 }
                 console.log("Logged in")
-                navigate('/')
             }
 
         } catch (error) {

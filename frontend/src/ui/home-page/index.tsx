@@ -1,5 +1,3 @@
-import ListingsContainer from "../../components/listings/ListingsContainer";
-
-const Home = () => <ListingsContainer />
+const Home = () => <>TBD user details</>
 
 export default Home;

@@ -2,9 +2,13 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { validateLogin } from '../../shared/utils/ValidateLogin';
 import './Navigation.css';
+import RegisterLogin from '../register-login-page/RegisterLogin';
 
 function Navigation() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen((prev) => !prev)
 
   useEffect(() => {
     let asyncCall = async () => {
@@ -28,13 +32,9 @@ function Navigation() {
 
         {/* show my-requested-listings if logged in user is a renter */}
         {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "renter") && <li><Link to="/listings" >My Requests</Link></li>}
-
-        {/* show register if no user logged in */}
-        {!localStorage.hasOwnProperty("user") && <li><Link to="/register">Register</Link></li>}
-
-        {/* hide login when user already logged in */}
-        {!localStorage.hasOwnProperty("user") && <li><Link to="/login">Login</Link></li>}
       </ul>
+      <button onClick={toggle}>Register or Login</button>
+      {isOpen && <RegisterLogin />}
     </nav>
   )
 }
