@@ -1,14 +1,31 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
+import { useEffect, useState } from 'react';
+import { validateLogin } from './shared/utils/ValidateLogin';
 import Navigation from './ui/nav/Navigation';
 import Home from './ui/home-page/index';
 import OwnerListings from './ui/owners-page/OwnerListings';
 import RenterRequestedListings from './ui/renters-page/RenterRequestedListings';
 import LogoutButton from './ui/LogoutButton';
 import ListingsContainer from './components/listings/ListingsContainer';
-import RegisterLogin from './ui/register-login-page/RegisterLogin';
+import './App.css';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState();
+
+  useEffect(() => {
+    let asyncCall = async () => {
+      let validateSession = await validateLogin.validateSession();
+      if (validateSession) {
+        setIsLoggedIn(true);
+        setCurrentUser
+      } else {
+        setIsLoggedIn(false);
+      }
+    }
+    asyncCall();
+  }, [localStorage.getItem("user")]);
+
   return (
     <>
       <BrowserRouter>
@@ -21,9 +38,6 @@ function App() {
         {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "owner") && <Route path="/listings" element={<OwnerListings />} />}
 
         {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") === "renter") && <Route path="/listings" element={<RenterRequestedListings />} />}
-        
-        {/* show register if no user logged in */}
-        {!localStorage.hasOwnProperty("user") && <Route path='/register-login' element={<RegisterLogin />} />}
       
         <Route path='*' element={<h1>404 Not Found</h1>}></Route>
       </Routes>

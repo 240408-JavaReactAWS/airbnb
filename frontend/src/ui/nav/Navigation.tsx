@@ -1,26 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { validateLogin } from '../../shared/utils/ValidateLogin';
-import './Navigation.css';
+import { useState } from 'react';
 import RegisterLogin from '../register-login-page/RegisterLogin';
+import './Navigation.css';
 
 function Navigation() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen((prev) => !prev)
-
-  useEffect(() => {
-    let asyncCall = async () => {
-      let validateSession = await validateLogin.validateSession();
-      if (validateSession) {
-        setIsLoggedIn(true);
-      } else{
-        setIsLoggedIn(false);
-      }
-    }
-    asyncCall();
-  }, [window.location.pathname]);
 
   return (
     <nav>
