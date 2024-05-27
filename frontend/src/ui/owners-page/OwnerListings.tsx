@@ -2,28 +2,11 @@ import { useState, useEffect } from 'react';
 import NewListingForm from './NewListingForm';
 import axios from 'axios';
 import Listing from '../../components/listings/listing/Listing';
-
-interface ListingType {
-    listing: {};
-    listingId: number;
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-    description: string;
-    bookings: any[];
-    photos: string[];
-}
-  
-interface Owner {
-    userId: number;
-    username: string;
-    email: string;
-    listings: ListingType[];
-}
+import IOwner from '../../shared/interfaces/owner';
+import IListing from '../../shared/interfaces/listing';
 
 function OwnerListings() {
-    const [owner, setOwner] = useState<Owner | null>(null);
+    const [owner, setOwner] = useState<IOwner | null>(null);
 
     useEffect(() => {
         const source = axios.CancelToken.source();
@@ -72,7 +55,7 @@ function OwnerListings() {
     <div className="owner">
         <h2>Add New Listing</h2>
         <NewListingForm />
-        {owner && owner.listings.map((l: ListingType) => <Listing key={l.listingId} listing={l} />)}
+        {owner && owner.listings.map((l: IListing) => <Listing key={l.listingId} listing={l} />)}
     </div>
     );
 }
