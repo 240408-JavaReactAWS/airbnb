@@ -9,7 +9,7 @@ function RentersContainer() {
   return (
     <>
       {renters && renters.map((renter) => (
-          <Renter key={renter.userId} renter={renter} />
+        <Renter key={renter.userId} renter={renter} />
       ))}
     </>
   );

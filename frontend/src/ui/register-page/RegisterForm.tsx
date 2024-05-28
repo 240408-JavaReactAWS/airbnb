@@ -1,9 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
-// import { useNavigate } from "react-router-dom";
 
 function RegisterForm() {
-    // const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -29,12 +27,8 @@ function RegisterForm() {
                 withCredentials: true
             });
 
-            // Handle successful login
-            console.log("Register successful");
-            console.log(res);
             if (res.status === 201) {
-                // TODO: redirect user somewhere
-                // navigate('/plans');
+                console.log("Register successful");
             }
 
         } catch (error) {

@@ -9,9 +9,9 @@ function ListingsContainer() {
 
   return (
     <div className="listings">
-        {listings && listings.map((listing) => (
-          <Listing key={listing.listingId} listing={listing} />
-        ))}
+      {listings && listings.map((listing) => (
+        <Listing key={listing.listingId} listing={listing} />
+      ))}
     </div>
   );
 }

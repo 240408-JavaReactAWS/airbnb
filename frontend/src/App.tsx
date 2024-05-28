@@ -1,45 +1,54 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import OwnersPage from './ui/owners-page/index';
-import RentersPage from './ui/renters-page';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { validateLogin } from './shared/utils/ValidateLogin';
 import Navigation from './ui/nav/Navigation';
 import Home from './ui/home-page/index';
-import LoginPage from './ui/login-page';
-import RegisterPage from './ui/register-page';
-import LogoutPage from './ui/logout-page';
 import OwnerListings from './ui/owners-page/OwnerListings';
 import RenterRequestedListings from './ui/renters-page/RenterRequestedListings';
+import LogoutButton from './ui/LogoutButton';
+import ListingsContainer from './components/listings/ListingsContainer';
+import './App.css';
 
 function App() {
+  // TODO: encapsulate in single state object
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{} | null>(null); // TODO: leverage IUser + IRenter OR IOwner
+  const [role, setRole] = useState<String | null>(null);
+
+  // TODO: lift useEffect to grab current user surrounding App component; useContext?
+  useEffect(() => {
+    let asyncCall = async () => {
+      let validateSession = await validateLogin.validateSession();
+      if (validateSession) {
+        setIsLoggedIn(true);
+        let user = localStorage.getItem("user")
+        if (user) {
+          setCurrentUser(JSON.parse(user))
+          setRole(localStorage.getItem("role"))
+          setIsLoggedIn(true)
+        }
+      } else {
+        setIsLoggedIn(false)
+      }
+    }
+    asyncCall();
+  }, []); // TODO: add dependencies such that app properly re-renders post user login
+
   return (
     <>
-      <BrowserRouter>
+      <Router>
         <Navigation />
+        {currentUser ? <LogoutButton /> : <></>}
+        
         <Routes>
-          <Route path='/' element={<Home />} />
-
-          {/* create mylistings if logged in user is an owner */}
-          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") == "owner") && <Route path="/mylistings" element={<OwnerListings />} />}
-
-          {/* create mylistings if logged in user is an owner */}
-          {(localStorage.hasOwnProperty("role") && localStorage.getItem("role") == "renter") && <Route path="/my-requested-listings" element={<RenterRequestedListings />} />}
-          
-          {/* show register if no user logged in */}
-          {!localStorage.hasOwnProperty("user") && <Route path='/register' element={<RegisterPage />} />}
-
-          {/* create login path when no user logged in */}
-          {!localStorage.hasOwnProperty("user") && <Route path='/login' element={<LoginPage />} />}
-
-          {/* create logout path if user is logged in */}
-          {localStorage.hasOwnProperty("user") && <Route path='/logout' element={<LogoutPage />} />}
-
-          <Route path='/owners' element={<OwnersPage />} />
-          <Route path='/renters' element={<RentersPage />} />
-          <Route path='*' element={<h1>404 Not Found</h1>}></Route>
+          <Route path="/" element={<Home />} />
+          {currentUser && <Route path="/listings" element={ role === "owner" ? <OwnerListings /> : <RenterRequestedListings />} />} {/* TODO: understand why no re-render post user logout */}
+          <Route path="*" element={<h1>404 Not Found</h1>} />
         </Routes>
-      </BrowserRouter>
+      </Router>
+      <ListingsContainer />
     </>
-  );
+  )
 }
 
 export default App;

@@ -1,9 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
-import { useNavigate } from "react-router-dom";
 
 function LogoutButton() {
-    const navigate = useNavigate();
     const [showError, setShowError] = useState(false);
 
     // returned obj has listings property -> Owner
@@ -22,8 +20,6 @@ function LogoutButton() {
                 localStorage.removeItem("user")
                 localStorage.removeItem("role")
                 console.log("Logged out")
-                navigate('/')
-
             }
         } catch (error) {
             setShowError(true);

@@ -39,7 +39,6 @@ function NewListingForm() {
             // Handle successful create listing
             if (res.status === 201) {
                 console.log("Listing created")
-                
             }
         } catch (error) {
             setShowError(true);

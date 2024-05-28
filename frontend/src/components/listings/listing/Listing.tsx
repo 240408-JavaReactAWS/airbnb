@@ -1,34 +1,16 @@
-import { useEffect, useState } from 'react';
-import IListing from '../../../shared/interfaces/listing';
-import './Listing.css';
-import ListingsPhotos from './photos/ListingPhotos';
+import { useState } from 'react';
 import axios from 'axios';
+import IListing from '../../../shared/interfaces/listing';
+import IRenter from '../../../shared/interfaces/renter';
+import ListingsPhotos from './photos/ListingPhotos';
+import './Listing.css';
 
 interface IListingProps {
   listing: IListing
 }
 
-interface BookingType {
-  listing: {};
-  listingId: number;
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  description: string;
-  bookings: any[];
-  photos: string[];
-}
-
-interface Renter {
-  userId: number;
-  username: string;
-  email: string;
-  bookings: BookingType[];
-}
-
 function Listing(props: IListingProps) {
-  const [renter, setRenter] = useState<Renter | null>(null);
+  const [renter, setRenter] = useState<IRenter | null>(null);
 
   const handleClick = () => {
     console.log(`Requesting ${props.listing.name}`);
@@ -37,36 +19,36 @@ function Listing(props: IListingProps) {
     let renterId = null;
     let renterUsername = null;
     if (localStorage.hasOwnProperty("user")) {
-        const stringifiedOwner = localStorage.getItem("user");
-        const parsedRenter = stringifiedOwner ? JSON.parse(stringifiedOwner) : null;
-        renterId = parsedRenter ? parsedRenter["userId"] : null;
-        renterUsername = parsedRenter ? parsedRenter["username"] : null;
+      const stringifiedOwner = localStorage.getItem("user");
+      const parsedRenter = stringifiedOwner ? JSON.parse(stringifiedOwner) : null;
+      renterId = parsedRenter ? parsedRenter["userId"] : null;
+      renterUsername = parsedRenter ? parsedRenter["username"] : null;
     }
 
     // If renterId is null, exit early
     if (!renterId) return;
 
     axios.post("http://localhost:8080/bookings", {
-      startDate: "04/25/24",
-      endDate: "05/1/24",
+      startDate: "04/25/24", // TODO: update to current date
+      endDate: "05/1/24", // TODO: update programmatically using user's input
       status: "pending",
       listingId: props.listing.listingId,
       renterId: 1
-  }, { 
+    }, { 
       withCredentials: true,
       headers: {
-          'Content-Type': 'application/json',
-          'renter': JSON.stringify(renterUsername)
+        'Content-Type': 'application/json',
+        'renter': JSON.stringify(renterUsername)
       }
-  })
-  .then(response => {
-    console.log("Successfully created Booking as Renter")
-    console.log(response.data);
+    })
+    .then(response => {
+      console.log("Successfully created Booking as Renter")
+      console.log(response.data);
       setRenter(response.data);
-  })
-  .catch(error => {
+    })
+    .catch(error => {
       console.error(error);
-  });
+    });
   }
 
   return (
