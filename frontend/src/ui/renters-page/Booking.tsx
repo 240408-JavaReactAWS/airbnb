@@ -1,13 +1,6 @@
-interface BookingType {
-  bookingId: number;
-  listingId: number;
-  renterId: number;
-  startDate: string;
-  endDate: string;
-  status: string;
-}
+import IBooking from "../../shared/interfaces/booking";
 
-function Booking(props: BookingType) {
+function Booking(props: IBooking) {
   return (
     <div className="booking" key={props.bookingId}>
       <h2>{props.startDate} - {props.endDate}</h2>

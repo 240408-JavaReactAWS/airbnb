@@ -53,17 +53,18 @@ function RenterRequestedListings() {
     if (renter && renter.bookings.length === 0) return (<div>No bookings found</div>);
 
     return (
-    <div className="renter">
-        {renter && renter.bookings.map((b: IBooking) => (
-            <Booking
-                bookingId={b.bookingId}
-                listingId={b.listingId}
-                renterId={b.renterId}
-                startDate={b.startDate}
-                endDate={b.endDate}
-                status={b.status}
-            />))}
-    </div>
+        <div className="renter">
+            {renter && renter.bookings.map((b: IBooking) => (
+                <Booking
+                    bookingId={b.bookingId}
+                    listingId={b.listingId}
+                    renterId={b.renterId}
+                    startDate={b.startDate}
+                    endDate={b.endDate}
+                    status={b.status}
+                />))
+            }
+        </div>
     );
 }
 
