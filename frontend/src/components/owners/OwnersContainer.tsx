@@ -9,9 +9,9 @@ function OwnersContainer() {
 
   return (
     <div className="owners">
-        {owners && owners.map((owner) => (
-            <Owner key={owner.userId} owner={owner} />
-        ))}
+      {owners && owners.map((owner) => (
+        <Owner key={owner.userId} owner={owner} />
+      ))}
     </div>
   );
 }
