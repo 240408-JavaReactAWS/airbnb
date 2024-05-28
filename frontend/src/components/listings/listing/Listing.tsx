@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import IListing from '../../../shared/interfaces/listing';
 import './Listing.css';
 import ListingsPhotos from './photos/ListingPhotos';

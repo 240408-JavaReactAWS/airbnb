@@ -1,25 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Booking from './Booking';
-
-interface BookingType {
-    bookingId: number;
-    listingId: number;
-    renterId: number;
-    startDate: string;
-    endDate: string;
-    status: string;
-}
-  
-interface Renter {
-    userId: number;
-    username: string;
-    email: string;
-    bookings: BookingType[];
-}
+import IRenter from '../../shared/interfaces/renter';
+import IBooking from '../../shared/interfaces/booking';
 
 function RenterRequestedListings() {
-    const [renter, setRenter] = useState<Renter | null>(null);
+    const [renter, setRenter] = useState<IRenter | null>(null);
 
     useEffect(() => {
         const source = axios.CancelToken.source();
@@ -68,7 +54,7 @@ function RenterRequestedListings() {
 
     return (
     <div className="renter">
-        {renter && renter.bookings.map((b: BookingType) => (
+        {renter && renter.bookings.map((b: IBooking) => (
             <Booking
                 bookingId={b.bookingId}
                 listingId={b.listingId}
